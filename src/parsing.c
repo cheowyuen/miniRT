@@ -39,14 +39,13 @@ t_object	*make_object(char *str)
 	object->type = PLANE;
 	object->position[0] = 0.0;
 	object->position[1] = 0.0;
-	object->position[2] = -10.0;
+	object->position[2] = 0.0;
 	object->orientation[0] = 0.0;
 	object->orientation[1] = 1.0;
 	object->orientation[2] = 0.0;
 	object->color = (225 << 8 | 255);
 	return (object);
 }
-
 
 t_scene	*parse_scene(char *filename)
 {
@@ -59,11 +58,15 @@ t_scene	*parse_scene(char *filename)
 	s->ambient->is_ambient = true;
 	s->num_lights = 1;
 	s->lights = malloc(sizeof(t_light *) * s->num_lights);
-	s->num_objects = 2;
+	s->num_objects = 3;
 	s->objects = malloc(sizeof(t_object *) * s->num_objects);
 	s->lights[0] = make_light("input line");
 	s->objects[0] = make_object("input line");
 	s->objects[1] = make_object("input line");
+	s->objects[2] = make_object("input line");
+	s->objects[1]->type = SPHERE;
+	s->objects[1]->position[2] = 0;
+	s->objects[1]->radius = 5;
 	return (s);
 }
 

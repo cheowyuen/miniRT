@@ -36,8 +36,8 @@ typedef struct s_object{
 	t_type type;
 	double position[3];
 	double orientation[3];
-	double var1;
-	double var2;
+	double radius;
+	double height;
 	int32_t color;
 } t_object;
 
@@ -76,7 +76,7 @@ void		mult_vec(double *target, double *vec, double scale);
 double	 	abs_vec(double *vec);
 
 //normal_vectors.c
-void make_normal_vector(t_point *p, double *result);
+void make_normal_vector(t_point *p);
 
 //lighting.c
 int32_t	get_color(t_point *p, t_scene *s);

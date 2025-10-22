@@ -1,5 +1,11 @@
 #include "minirt.h"
 
+static void run_scene(t_scene * scene)
+{
+	(void)scene;
+	printf("Imagine a beatiful sphere\n");
+}
+
 int main(int argc, char **argv)
 {
 	t_scene	*scene;

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define EPSILON 1e-9
+
 typedef enum e_type{
 	SPHERE,
 	PLANE,
@@ -37,13 +39,19 @@ typedef struct s_object{
 } t_object;
 
 typedef struct s_scene{
-	t_camera *camera;
-	t_light *ambient;
-	t_light **lights;
-	size_t num_lights;
-	t_object **objects;
-	size_t num_objects;
+	t_camera	*camera;
+	t_light		*ambient;
+	t_light		**lights;
+	size_t		num_lights;
+	t_object	**objects;
+	size_t		num_objects;
 } t_scene;
+
+typedef struct t_point{
+	double		point[3];
+	t_object	*object;
+	double		normal[3];
+}
 
 t_camera	*make_camera(char *str);
 t_light		*make_light(char *str);

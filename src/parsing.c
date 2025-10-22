@@ -1,4 +1,4 @@
-i#include "minirt.h"
+#include "minirt.h"
 
 t_camera	*make_camera(char *str)
 {

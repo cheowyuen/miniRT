@@ -2,7 +2,7 @@
 //all double pointers must point to arrays of size 3
 
 //add together two vectors, store result in target. 
-void	add_vec(double *target, double *a, double *b)
+inline void	add_vec(double *target, double *a, double *b)
 {
 	target[0] = a[0] + b[0];
 	target[1] = a[1] + b[1];
@@ -10,7 +10,7 @@ void	add_vec(double *target, double *a, double *b)
 }
 
 //subtract two vectors, store result in target.
-void	sub_vec(double *target, double *a, double *b)
+inline void	sub_vec(double *target, double *a, double *b)
 {
 	target[0] = a[0] - b[0];
 	target[1] = a[1] - b[1];
@@ -24,7 +24,7 @@ inline double dot_prod(double *a, double *b)
 }
 
 //multiply vector with scalar
-void	mult_vec(double *target, double *vec, double scale)
+inline void	mult_vec(double *target, double *vec, double scale)
 {
 	target[0] = vec[0] * scale;
 	target[1] = vec[1] * scale;

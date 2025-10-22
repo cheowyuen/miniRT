@@ -78,6 +78,7 @@ double	 	abs_vec(double *vec);
 //normal_vectors.c
 void make_normal_vector(t_point *p, double *result);
 
-
-
+//lighting.c
+int32_t	get_color(t_point *p, t_scene *s);
+double get_light_intensity(t_point *p, t_scene *s);
 #endif

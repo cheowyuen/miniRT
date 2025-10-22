@@ -1,6 +1,7 @@
 #ifndef MINIRT_H
 #define MINIRT_H
 
+#include <MLX42.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -9,6 +10,8 @@
 #include <stdint.h>
 
 #define EPSILON 1e-9
+#define HEIGHT 1000
+#define WIDTH 1600
 
 typedef enum e_type{
 	SPHERE,
@@ -47,16 +50,34 @@ typedef struct s_scene{
 	size_t		num_objects;
 } t_scene;
 
-typedef struct t_point{
+typedef struct s_point{
 	double		point[3];
 	t_object	*object;
 	double		normal[3];
-}
+} t_point;
 
+typedef struct s_mlx_data{
+	mlx_t		*mlx;
+	mlx_image_t	*current;
+} t_mlx_data;
+
+//parsing.c
 t_camera	*make_camera(char *str);
 t_light		*make_light(char *str);
 t_object	*make_object(char *str);
 t_scene		*parse_scene(char *filename);
 void 		free_scene(t_scene *scene);
+
+//vector.c
+void		add_vec(double *target, double *a, double *b);
+void		sub_vec(double *target, double *a, double *b);
+double		dot_prod(double *a, double *b);
+void		mult_vec(double *target, double *vec, double scale);
+double	 	abs_vec(double *vec);
+
+//normal_vectors.c
+void make_normal_vector(t_point *p, double *result);
+
+
 
 #endif

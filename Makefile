@@ -6,13 +6,13 @@
 #    By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:01:30 by cwong             #+#    #+#              #
-#    Updated: 2025/10/20 11:33:39 by cwong            ###   ########.fr        #
+#    Updated: 2025/10/22 12:45:17 by nraatika         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		:= cc
 
-CFLAGS	:= -Wall -Wextra -Werror -Iincludes
+CFLAGS	:= -Wall -Wextra -Werror -g
 
 NAME	:= miniRT
 
@@ -24,24 +24,41 @@ OBJS    := $(patsubst src/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 LIBFT_PATH	:= ./libft
 LIBFT		:= $(LIBFT_PATH)/libft.a
 
-MLX42_PATH	:= ./MLX42
-MLX42		:= $(MLX42_PATH)/build/libmlx42.a
+MLX_PATH	:= ./MLX/build/
+MLX_NAME	:= libmlx42.a
+MLX_BPATH	:= ./MLX/
+MLX			:= $(MLX_PATH)$(MLX_NAME)
+
+#MLX42_PATH	:= ./MLX42
+#MLX42		:= $(MLX42_PATH)/build/libmlx42.a
+
+INC_DIR		:= includes
+INC			:= -I./MLX/include/MLX42 -I./$(INC_DIR)
+LIBS		:= -L$(MLX_PATH) -lmlx42 -lXext -lX11 -lm -lz -ldl -lglfw -pthread
+
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT) $(MLX42)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX42) -ldl -lglfw -lm
+$(NAME): $(OBJS) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX) -ldl -lglfw -lm
 
 $(OBJ_DIR)/%.o: src/%.c
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 $(LIBFT):
 	make -C $(LIBFT_PATH)
 
-$(MLX42):
-	cmake -S $(MLX42_PATH) -B $(MLX42_PATH)/build
-	cmake --build $(MLX42_PATH)/build
+$(MLX):		
+		git clone -q --depth 1 --branch v2.4.1 --single-branch\
+			https://github.com/codam-coding-college/MLX42.git MLX
+		cd $(MLX_BPATH)	&& cmake -B build
+		$(MAKE) -C $(MLX_PATH)
+
+
+#$(MLX42):
+#	cmake -S $(MLX42_PATH) -B $(MLX42_PATH)/build
+#	cmake --build $(MLX42_PATH)/build
 
 clean:
 	$(MAKE) -C $(LIBFT_PATH) clean

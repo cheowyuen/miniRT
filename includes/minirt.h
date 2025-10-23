@@ -61,6 +61,11 @@ typedef struct s_mlx_data{
 	mlx_image_t	*current;
 } t_mlx_data;
 
+typedef struct s_ray{
+	double	origin[3];
+	double	direction[3];
+} t_ray;
+
 //parsing.c
 t_camera	*make_camera(char *str);
 t_light		*make_light(char *str);
@@ -81,4 +86,5 @@ void make_normal_vector(t_point *p);
 //lighting.c
 int32_t	get_color(t_point *p, t_scene *s);
 double get_light_intensity(t_point *p, t_scene *s);
+
 #endif

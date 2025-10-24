@@ -11,7 +11,7 @@
 
 #define EPSILON 1e-9
 #define HEIGHT 1000
-#define WIDTH 1600
+#define WIDTH 1000
 
 typedef enum e_type{
 	SPHERE,
@@ -56,10 +56,12 @@ typedef struct s_point{
 	double		normal[3];
 } t_point;
 
-typedef struct s_mlx_data{
+typedef struct s_app{
 	mlx_t		*mlx;
 	mlx_image_t	*current;
-} t_mlx_data;
+	t_scene		*scene;
+	int			exit_code;
+} t_app;
 
 //parsing.c
 t_camera	*make_camera(char *str);
@@ -76,9 +78,21 @@ void		mult_vec(double *target, double *vec, double scale);
 double	 	abs_vec(double *vec);
 
 //normal_vectors.c
-void make_normal_vector(t_point *p);
+void		make_normal_vector(t_point *p);
 
 //lighting.c
-int32_t	get_color(t_point *p, t_scene *s);
-double get_light_intensity(t_point *p, t_scene *s);
+int32_t		get_color(t_point *p, t_scene *s);
+double		get_light_intensity(t_point *p, t_scene *s);
+
+//main.c
+void		ft_exit(void *param);
+
+//window.c
+void		free_window(t_app *window);
+void		make_window(t_scene *scene, t_app *window);
+
+//hooks.c
+void 		handle_keys(mlx_key_data_t keydata, void *param);
+void		handle_resize(int32_t width, int32_t height, void* param);
+
 #endif

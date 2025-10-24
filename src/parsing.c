@@ -69,18 +69,3 @@ t_scene	*parse_scene(char *filename)
 	s->objects[1]->radius = 5;
 	return (s);
 }
-
-void free_scene(t_scene *scene)
-{
-	int i;
-
-	free(scene->camera);
-	free(scene->ambient);
-	i = -1;
-	while (++i < (int)scene->num_lights)
-		free(scene->lights[i]);
-	i = -1;
-	while (++i < (int)scene->num_objects)
-		free(scene->objects[i]);
-	free(scene);
-}

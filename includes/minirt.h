@@ -87,4 +87,7 @@ void make_normal_vector(t_point *p);
 int32_t	get_color(t_point *p, t_scene *s);
 double get_light_intensity(t_point *p, t_scene *s);
 
+//ray.c
+void	for_each_pixel(t_scene *scene);
+
 #endif

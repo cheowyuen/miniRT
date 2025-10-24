@@ -36,7 +36,7 @@ double get_light_intensity(t_point *p, t_scene *s)
 	{
 		if(is_visible(p, s->lights[i], s->objects, s->num_objects))
 		{
-			make_normal_vector(p, normal);
+			// make_normal_vector(p, normal);
 			sub_vec(light_to_point, p->point, s->lights[i]->position);
 			total += dot_prod(normal, light_to_point) / (abs_vec(light_to_point));
 		}

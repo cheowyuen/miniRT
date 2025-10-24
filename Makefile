@@ -6,7 +6,7 @@
 #    By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:01:30 by cwong             #+#    #+#              #
-#    Updated: 2025/10/22 12:45:17 by nraatika         ###   ########.fr        #
+#    Updated: 2025/10/24 13:41:49 by cwong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ MLX			:= $(MLX_PATH)$(MLX_NAME)
 #MLX42		:= $(MLX42_PATH)/build/libmlx42.a
 
 INC_DIR		:= includes
-INC			:= -I./MLX/include/MLX42 -I./$(INC_DIR)
+INC			:= -I./MLX42/include/MLX42 -I./$(INC_DIR)
 LIBS		:= -L$(MLX_PATH) -lmlx42 -lXext -lX11 -lm -lz -ldl -lglfw -pthread
 
 

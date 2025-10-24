@@ -28,10 +28,10 @@ bool	hit_sphere(t_ray ray, t_object *sphere, double *t)
 	t2 = (-b - sqrt(discriminant)) / (2 * a);
 	if (t1 > 0 && t2 > 0)
 	{
-		if (t2 < t1)
-			*t = t2;
-		else
+		if (t1 < t2)
 			*t = t1;
+		else
+			*t = t2;
 	}
 	else if (t1 > 0)
 		*t = t1;
@@ -42,32 +42,46 @@ bool	hit_sphere(t_ray ray, t_object *sphere, double *t)
 	return (true);
 }
 
+void normalize(double *d)
+{
+	double	length;
+
+	length = abs_vec(d);
+	d[0] /= length;
+	d[1] /= length;
+	d[2] /= length;
+}
+
 t_ray	make_ray(double *origin, int cx, int cy)
 {
 	t_ray	ray;
+	double	vw;
+	double	vh;
 
 	ray.origin[0] = origin[0];
 	ray.origin[1] = origin[1];
 	ray.origin[2] = origin[2];
-	// assuming 1x1 viewport
-	// center the viewport at (0,0)
-	// vx=(cx+0.5).(vw/cw)-vw/2
-	// vy=vh/2-(ch+0.5).(vh/ch)
-	ray.direction[0] = (double)cx / WIDTH;
-	ray.direction[1] = (double)cy / HEIGHT;
+	// assuming 1x1 viewport, can upgrade to fov based viewport
+	// fov_x = fov * M_PI / 180.0 
+	// vw = 2 * tan(fov_x / 2)
+	// vh = vw * double(HEIGHT) / WIDTH
+	vw = 1;
+	vh = 1;
+	ray.direction[0] = (cx + 0.5) * vw / (double)WIDTH - vw / 2;
+	ray.direction[1] = vh / 2 - (cy + 0.5) * vh / (double)HEIGHT;
 	ray.direction[2] = 1;
-	// normalize(ray.direction);
+	normalize(ray.direction);
 	return (ray);
 }
 
-void	for_each_pixel(t_scene scene)
+void	for_each_pixel(t_scene *scene)
 {
 	int			cx;
 	int			cy;
 	t_ray		ray;
 	double		t;
 	double		closest_t;
-	t_object	*closest_sphere;
+	t_object	*closest_obj;
 	double		hit[3];
 	int			i;
 
@@ -79,31 +93,37 @@ void	for_each_pixel(t_scene scene)
 	// 	{
 			cx = 800;
 			cy = 500;
-			ray = make_ray(scene.camera->position, cx, cy);
+			ray = make_ray(scene->camera->position, cx, cy);
 			closest_t = INFINITY;
-			closest_sphere = NULL;
+			closest_obj = NULL;
 			i = 0;
 			// while (i < scene.num_objects)
 			// {
-				if (scene.objects[i]->type == SPHERE)
+				if (scene->objects[i]->type == SPHERE)
 				{
-					if (hit_sphere(ray, scene.objects[i], &t))
+					if (hit_sphere(ray, scene->objects[i], &t))
 					{
 						if (t < closest_t)
 						{
 							closest_t = t;
-							closest_sphere = scene.objects[i];
+							closest_obj = scene->objects[i];
 						}
 					}
 				}
 			// }
-			if (closest_sphere)
+			if (closest_obj)
 			{
-				hit_points(hit, ray.origin, ray.direction, closest_t);
+				if (closest_obj->type == SPHERE)
+				{
+					printf("Hit sphere at distance t = %f\n", closest_t);
+					hit_points(hit, ray.origin, ray.direction, closest_t);
+    				printf("Hit point: (%f, %f, %f)\n", hit[0], hit[1], hit[2]);
+				}
 				// apply lighting
 			}
 			else
-			{
+			{ 
+				printf("No hit\n");
 				// apply background colour
 			}
 			// cy++;

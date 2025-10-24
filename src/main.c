@@ -25,10 +25,11 @@ static void run_scene(t_scene *scene)
 {
 	t_mlx_data	window;
 
-	(void)scene;
+	// (void)scene;
 	printf("Imagine a beatiful sphere\n");
 	window.mlx = mlx_init(HEIGHT, WIDTH, "miniRT", false);
 	window.current = mlx_new_image(window.mlx, HEIGHT, WIDTH);
+	for_each_pixel(scene);
 	//make_viewport(scene->camera);
 //	update_image(scene, window.current);
 }
@@ -36,14 +37,14 @@ static void run_scene(t_scene *scene)
 int main(int argc, char **argv)
 {
 	test_sphere_normal();
-	return (1);
+	// return (1);
 
 	t_scene	*scene;
 
 	if (argc != 2)
 	{
 	    printf("Please give a filename as argument\n");
-	    return (1);
+	    // return (1);
 	}
 	scene = parse_scene(argv[1]);
 	run_scene(scene);

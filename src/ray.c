@@ -7,6 +7,21 @@ void	hit_points(double *hit, double *origin, double *direction, double t)
 	hit[2] = origin[2] + t * direction[2];
 }
 
+bool	hit_plane(t_ray ray, t_object *plane, double *t)
+{
+	double	po[3];
+	double	a;
+	double	b;
+
+	sub_vec(po, plane->position, ray.origin);
+	a = dot_prod(po, plane->orientation);
+	b= dot_prod(ray.direction, plane->orientation);
+	if (fabs(b) < 1e-9)
+		return (false);
+	*t = a / b;
+	return (*t >= 0);
+}
+
 bool	hit_sphere(t_ray ray, t_object *sphere, double *t)
 {
 	double	oc[3];
@@ -84,6 +99,7 @@ void	for_each_pixel(t_scene *scene)
 	t_object	*closest_obj;
 	double		hit[3];
 	int			i;
+	bool		is_hit;
 
 	// cx = 0;
 	// while (cx < WIDTH)
@@ -99,26 +115,21 @@ void	for_each_pixel(t_scene *scene)
 			i = 0;
 			// while (i < scene.num_objects)
 			// {
+				is_hit = false;
 				if (scene->objects[i]->type == SPHERE)
+					is_hit = hit_sphere(ray, scene->objects[i], &t);
+				else if (scene->objects[i]->type == PLANE)
+					is_hit = hit_plane(ray, scene->objects[i], &t);
+				if (is_hit && t < closest_t)
 				{
-					if (hit_sphere(ray, scene->objects[i], &t))
-					{
-						if (t < closest_t)
-						{
-							closest_t = t;
-							closest_obj = scene->objects[i];
-						}
-					}
+					closest_t = t;
+					closest_obj = scene->objects[i];
 				}
 			// }
 			if (closest_obj)
 			{
-				if (closest_obj->type == SPHERE)
-				{
-					printf("Hit sphere at distance t = %f\n", closest_t);
-					hit_points(hit, ray.origin, ray.direction, closest_t);
-    				printf("Hit point: (%f, %f, %f)\n", hit[0], hit[1], hit[2]);
-				}
+				hit_points(hit, ray.origin, ray.direction, closest_t);
+				printf("Hit point: (%f, %f, %f)\n", hit[0], hit[1], hit[2]);
 				// apply lighting
 			}
 			else

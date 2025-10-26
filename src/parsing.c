@@ -65,8 +65,12 @@ t_scene	*parse_scene(char *filename)
 	s->objects[1] = make_object("input line");
 	s->objects[2] = make_object("input line");
 	s->objects[1]->type = SPHERE;
-	s->objects[1]->position[2] = 0;
+	s->objects[1]->position[0] = -50;
+	s->objects[1]->position[2] = 50;
 	s->objects[1]->radius = 5;
+	s->objects[0]->type = PLANE;
+	s->objects[0]->orientation[0] = 1.0;
+	s->objects[0]->orientation[1] = 0.0;
 	return (s);
 }
 

@@ -8,6 +8,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
+#include "libft.h"
 
 #define EPSILON 1e-9
 #define HEIGHT 1000
@@ -86,6 +87,7 @@ double	 	abs_vec(double *vec);
 void		make_normal_vector(t_point *p);
 
 //lighting.c
+void		set_point(t_point *p, double *hit, t_object *object);
 int32_t		get_color(t_point *p, t_scene *s);
 double		get_light_intensity(t_point *p, t_scene *s);
 
@@ -104,6 +106,6 @@ int32_t	get_color(t_point *p, t_scene *s);
 double get_light_intensity(t_point *p, t_scene *s);
 
 //ray.c
-void	for_each_pixel(t_scene *scene);
+int32_t	for_each_pixel(t_scene *scene, uint32_t x, uint32_t y);
 
 #endif

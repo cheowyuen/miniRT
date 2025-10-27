@@ -1,5 +1,13 @@
 #include "minirt.h"
 
+void	set_point(t_point *p, double *hit, t_object *object)
+{
+	p->point[0] = hit[0];
+	p->point[1] = hit[1];
+	p->point[2] = hit[2];
+	p->object = object;
+}
+
 static bool	is_visible(t_point *p, t_light *l, t_object **objects, size_t count)
 {
 	(void)p;

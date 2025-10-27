@@ -93,7 +93,7 @@ t_ray	make_ray(double *origin, int cx, int cy)
 	return (ray);
 }
 
-void	for_each_pixel(t_scene *scene)
+int32_t	for_each_pixel(t_scene *scene, uint32_t x, uint32_t y)
 {
 	int			cx;
 	int			cy;
@@ -104,7 +104,10 @@ void	for_each_pixel(t_scene *scene)
 	double		hit[3];
 	int			i;
 	bool		is_hit;
+	t_point		p;
 
+	(void)x;
+	(void)y;
 	// cx = 0;
 	// while (cx < WIDTH)
 	// {
@@ -134,12 +137,16 @@ void	for_each_pixel(t_scene *scene)
 			{
 				hit_points(hit, ray.origin, ray.direction, closest_t);
 				printf("Hit point: (%f, %f, %f)\n", hit[0], hit[1], hit[2]);
+				
 				// apply lighting
+				set_point(&p, hit, closest_obj);
+				return (get_color(&p, scene));
 			}
 			else
 			{ 
 				printf("No hit\n");
 				// apply background colour
+				return (0);
 			}
 			// cy++;
 	// 	}

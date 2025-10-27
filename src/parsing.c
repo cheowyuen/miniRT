@@ -72,6 +72,9 @@ t_scene	*parse_scene(char *filename)
 	s->objects[0]->position[2] = 30;
 	s->objects[0]->orientation[1] = 0.0;
 	s->objects[0]->orientation[2] = 1.0;
+	s->objects[2]->type = CYLINDER;
+	s->objects[2]->radius = 10;
+	s->objects[2]->height = 50;
 	return (s);
 }
 

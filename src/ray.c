@@ -7,6 +7,71 @@ void	hit_points(double *hit, double *origin, double *direction, double t)
 	hit[2] = origin[2] + t * direction[2];
 }
 
+bool	hit_height(double t, t_ray ray, t_object *cylinder)
+{
+	double x[3];
+	double y;
+	double vec[3];
+
+	x[0] = t * ray.direction[0];
+	x[1] = t * ray.direction[1];
+	x[2] = t * ray.direction[2];
+	vec[0] = ray.origin[0] + x[0] - cylinder->position[0];
+	vec[1] = ray.origin[1] + x[1] - cylinder->position[1];
+	vec[2] = ray.origin[2] + x[2] - cylinder->position[2];
+	y = dot_prod(vec, cylinder->orientation);
+	if (y < 0 || y > cylinder->height)
+		return (false);
+	return (true);
+}
+
+bool	hit_cylinder(t_ray ray, t_object *cylinder, double *t)
+{
+	double	oc[3];
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
+	double	t1;
+	double	t2;
+	double	d_perp[3];
+	double	oc_perp[3];
+
+	sub_vec(oc, ray.origin, cylinder->position);
+	a = dot_prod(ray.direction, cylinder->orientation);
+	d_perp[0] = ray.direction[0] - a * cylinder->orientation[0];
+	d_perp[1] = ray.direction[1] - a * cylinder->orientation[1];
+	d_perp[2] = ray.direction[2] - a * cylinder->orientation[2];
+	a = dot_prod(oc, cylinder->orientation);
+	oc_perp[0] = oc[0] - a * cylinder->orientation[0];
+	oc_perp[1] = oc[1] - a * cylinder->orientation[1];
+	oc_perp[2] = oc[2] - a * cylinder->orientation[2];
+	a = dot_prod(d_perp, d_perp);
+	b = 2 * dot_prod(d_perp, oc_perp);
+	c = dot_prod(oc_perp, oc_perp) - (cylinder->radius * cylinder->radius);
+	discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return (false);
+	t1 = (-b + sqrt(discriminant)) / (2 * a);
+	t2 = (-b - sqrt(discriminant)) / (2 * a);
+	if (!hit_height(t1, ray, cylinder) && !hit_height(t2, ray, cylinder))
+		return (false);
+	if (t1 > 0 && t2 > 0)
+	{
+		if (t1 < t2)
+			*t = t1;
+		else
+			*t = t2;
+	}
+	else if (t1 > 0)
+		*t = t1;
+	else if (t2 > 0)
+		*t = t2;
+	else
+		return (false);
+	return (true);
+}
+
 bool	hit_plane(t_ray ray, t_object *plane, double *t)
 {
 	double	po[3];
@@ -124,6 +189,8 @@ void	for_each_pixel(t_scene *scene)
 					is_hit = hit_sphere(ray, scene->objects[i], &t);
 				else if (scene->objects[i]->type == PLANE)
 					is_hit = hit_plane(ray, scene->objects[i], &t);
+				else if (scene->objects[i]->type == CYLINDER)
+					is_hit = hit_cylinder(ray, scene->objects[i], &t);
 				if (is_hit && t < closest_t)
 				{
 					closest_t = t;

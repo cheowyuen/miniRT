@@ -1,6 +1,6 @@
 *.o
 *.a
 obj/
-/MLX42/build
+/MLX/build
 miniRT
 .vscode

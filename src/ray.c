@@ -12,13 +12,17 @@ bool	hit_plane(t_ray ray, t_object *plane, double *t)
 	double	po[3];
 	double	a;
 	double	b;
-
+	
 	sub_vec(po, plane->position, ray.origin);
 	a = dot_prod(po, plane->orientation);
 	b= dot_prod(ray.direction, plane->orientation);
-	if (fabs(b) < 1e-9)
+	if (fabs(b) < 1e-9) // plane is parallel to ray
 		return (false);
 	*t = a / b;
+	// if ray is too close to origin
+	// if (*t < 1e-6)
+	// 	return (false);
+	// return (true);
 	return (*t >= 0);
 }
 

@@ -69,8 +69,9 @@ t_scene	*parse_scene(char *filename)
 	s->objects[1]->position[2] = 50;
 	s->objects[1]->radius = 5;
 	s->objects[0]->type = PLANE;
-	s->objects[0]->orientation[0] = 1.0;
+	s->objects[0]->position[2] = 30;
 	s->objects[0]->orientation[1] = 0.0;
+	s->objects[0]->orientation[2] = 1.0;
 	return (s);
 }
 

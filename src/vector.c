@@ -36,3 +36,12 @@ double abs_vec(double *vec)
 {
 	return (sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]));
 }
+
+//create the dot product of two vectors and store it in target 
+//NOTE: target can't be a or b
+void	cross_prod(double *target, double *a, double *b)
+{
+	target[0] = a[1] * b[2] - a[2] * b[1];
+	target[1] = a[2] * b[0] - a[0] * b[2];
+	target[2] = a[0] * b[1] - a[1] * b[0];
+}

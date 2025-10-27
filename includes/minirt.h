@@ -63,6 +63,11 @@ typedef struct s_app{
 	int			exit_code;
 } t_app;
 
+typedef struct s_ray{
+	double	origin[3];
+	double	direction[3];
+} t_ray;
+
 //parsing.c
 t_camera	*make_camera(char *str);
 t_light		*make_light(char *str);
@@ -94,5 +99,11 @@ void		make_window(t_scene *scene, t_app *window);
 //hooks.c
 void 		handle_keys(mlx_key_data_t keydata, void *param);
 void		handle_resize(int32_t width, int32_t height, void* param);
+
+int32_t	get_color(t_point *p, t_scene *s);
+double get_light_intensity(t_point *p, t_scene *s);
+
+//ray.c
+void	for_each_pixel(t_scene *scene);
 
 #endif

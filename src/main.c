@@ -30,10 +30,7 @@ static void run_scene(t_scene *scene)
 {
 	t_app	window;
 
-	printf("Imagine a beatiful sphere\n");
 	make_window(scene, &window);
-//	make_viewport(scene->camera);
-//	update_image(scene, window.current);
 	mlx_loop(window.mlx);
 	window.exit_code = 0;
 	ft_exit(&window);

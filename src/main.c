@@ -30,7 +30,7 @@ static void run_scene(t_scene *scene)
 {
 	t_app	window;
 
-	printf("Imagine a beatiful sphere\n");
+	printf("Imagine a beatiful scene\n");
 	make_window(scene, &window);
 //	make_viewport(scene->camera);
 //	update_image(scene, window.current);

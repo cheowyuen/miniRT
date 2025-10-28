@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-t_camera	*make_camera(char *str)
+t_camera	*make_camera(char *str, t_scene *scene)
 {
 	t_camera	*camera;
 
@@ -16,21 +16,25 @@ t_camera	*make_camera(char *str)
 	return (camera);
 }
 
-t_light	*make_light(char *str)
+t_light	*make_light(char *str, t_scene *scene, bool ambient)
 {
 	t_light *light;
+	int		i;
 
-	(void)str;
 	light = malloc(sizeof(t_light));
+	if (!light)
+		parse_error("malloc error: ", strerror(errno), scene);
+	ft_memset(light, 0, sizeof(t_light));
+	i = 0;
 	light->position[0] = -40.0;
 	light->position[1] = 50.0;
 	light->position[2] = 0.0;
 	light->intensity = 0.2;
-	light->is_ambient = false;
+	light->is_ambient = ambient;
 	return (light);
 }
 
-t_object	*make_object(char *str)
+t_object	*make_object(char *str, t_scene *scene)
 {
 	t_object *object;
 
@@ -47,25 +51,50 @@ t_object	*make_object(char *str)
 	return (object);
 }
 
+void	check_and_add_line(char *line, t_scene *s)
+{
+	if (*line == '\0')
+		return ;
+	if (*line == 'L')
+		make_light(line, s, false);
+	if (*line == 'A')
+		make_light(line, s, true);
+	if (*line == 'C')
+		make_camera
+}
+
+void	parse_error(char *msg, char *arg, void *scene)
+{
+	printf("Error\n");
+	printf(msg);
+	if (arg)
+		printf(arg);
+	printf("\n");
+	free(scene);
+	exit(1);
+}
+
 t_scene	*parse_scene(char *filename)
 {
 	t_scene	*s;
+	int		fd;
+	char 	*line;
 
-	(void)filename;
 	s = malloc(sizeof(t_scene));
-	s->camera = make_camera("input_line");
-	s->ambient = make_light("input_line");
-	s->ambient->is_ambient = true;
-	s->num_lights = 1;
-	s->lights = malloc(sizeof(t_light *) * s->num_lights);
-	s->num_objects = 3;
-	s->objects = malloc(sizeof(t_object *) * s->num_objects);
-	s->lights[0] = make_light("input line");
-	s->objects[0] = make_object("input line");
-	s->objects[1] = make_object("input line");
-	s->objects[2] = make_object("input line");
-	s->objects[1]->type = SPHERE;
-	s->objects[1]->position[2] = 0;
-	s->objects[1]->radius = 5;
+	if (!s)
+		return (NULL);
+	ft_memset(s, 0, sizeof(t_scene));
+	if (!ft_strcmp((filename + ft_strlen(filename) - 3), ".rt")
+		parse_error("Invalid filename: ", filename, s);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		parse_error("Error opening file: ", filename, s);
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		check_and_add_line(line, s);
+		line = get_next_line(fd);
+	}
+	check_requirements(s);
 	return (s);
 }

@@ -2,12 +2,15 @@
 #define MINIRT_H
 
 #include <MLX42.h>
+#include <fcntl.h>
+#include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
+#include "libft.h"
 
 #define EPSILON 1e-9
 #define HEIGHT 1000

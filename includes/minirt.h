@@ -20,9 +20,12 @@ typedef enum e_type{
 } t_type;
 
 typedef struct s_camera{
-	double position[3];
-	double direction[3];
-	double fov;
+	double	position[3];
+	double	direction[3];
+	double	fov;
+	double	zero_coords[3];
+	double	delta_x[3];
+	double	delta_y[3];
 } t_camera;
 
 typedef struct s_light{

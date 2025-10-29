@@ -20,16 +20,19 @@ typedef enum e_type{
 } t_type;
 
 typedef struct s_camera{
-	double position[3];
-	double direction[3];
-	double fov;
+	double	position[3];
+	double	direction[3];
+	double	fov;
+	double	zero_coords[3];
+	double	delta_x[3];
+	double	delta_y[3];
 } t_camera;
 
 typedef struct s_light{
 	double	position[3];
 	bool	is_ambient;
 	double	intensity;
-	//int32_t color;
+	int32_t color;
 } t_light;
 
 typedef struct s_object{
@@ -63,12 +66,21 @@ typedef struct s_app{
 	int			exit_code;
 } t_app;
 
+typedef struct s_ray{
+	double	origin[3];
+	double	direction[3];
+} t_ray;
+
 //parsing.c
 t_camera	*make_camera(char *str);
 t_light		*make_light(char *str);
 t_object	*make_object(char *str);
 t_scene		*parse_scene(char *filename);
 void 		free_scene(t_scene *scene);
+
+//parsing_utils.c
+void		cross_vec(double *target, double *a, double *b);
+void		setup_geometry(t_camera *c);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);
@@ -94,5 +106,9 @@ void		make_window(t_scene *scene, t_app *window);
 //hooks.c
 void 		handle_keys(mlx_key_data_t keydata, void *param);
 void		handle_resize(int32_t width, int32_t height, void* param);
+
+//ray.c
+void	for_each_pixel(t_scene *scene);
+void	normalize(double *d);
 
 #endif

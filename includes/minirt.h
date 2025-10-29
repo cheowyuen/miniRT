@@ -76,6 +76,10 @@ t_object	*make_object(char *str);
 t_scene		*parse_scene(char *filename);
 void 		free_scene(t_scene *scene);
 
+//parsing_utils.c
+void		cross_vec(double *target, double *a, double *b);
+void		setup_geometry(t_camera *c);
+
 //vector.c
 void		add_vec(double *target, double *a, double *b);
 void		sub_vec(double *target, double *a, double *b);
@@ -92,5 +96,6 @@ double get_light_intensity(t_point *p, t_scene *s);
 
 //ray.c
 void	for_each_pixel(t_scene *scene);
+void	normalize(double *d);
 
 #endif

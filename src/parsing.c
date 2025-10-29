@@ -13,6 +13,7 @@ t_camera	*make_camera(char *str)
 	camera->direction[1] = 0.0;
 	camera->direction[2] = 1.0;
 	camera->fov = 70;
+	setup_geometry(camera);
 	return (camera);
 }
 

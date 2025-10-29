@@ -154,38 +154,26 @@ void normalize(double *d)
 	d[2] /= length;
 }
 
-// t_ray	make_ray(double *origin, double pixel_pos[3])
-t_ray	make_ray(double *origin, int cx, int cy)
+t_ray	make_ray(double *origin, double pixel_pos[3])
 {
 	t_ray	ray;
-	double	vw;
-	double	vh;
 
 	ray.origin[0] = origin[0];
 	ray.origin[1] = origin[1];
 	ray.origin[2] = origin[2];
-	// assuming 1x1 viewport, can upgrade to fov based viewport
-	// fov_x = fov * M_PI / 180.0 
-	// vw = 2 * tan(fov_x / 2)
-	// vh = vw * double(HEIGHT) / WIDTH
-	vw = 1;
-	vh = 1;
-	ray.direction[0] = (cx + 0.5) * vw / (double)WIDTH - vw / 2;
-	ray.direction[1] = vh / 2 - (cy + 0.5) * vh / (double)HEIGHT;
-	ray.direction[2] = 1;
-	// ray.direction[0] = pixel_pos[0] - origin[0];
-	// ray.direction[0] = pixel_pos[1] - origin[0];
-	// ray.direction[0] = pixel_pos[2] - origin[0];
+	ray.direction[0] = pixel_pos[0] - origin[0];
+	ray.direction[1] = pixel_pos[1] - origin[1];
+	ray.direction[2] = pixel_pos[2] - origin[2];
 	normalize(ray.direction);
 	return (ray);
 }
 
-// void add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy)
-// {
-//     pos[0] = camera->zero_coords[0] + camera->delta_x[0] * cx + camera->delta_y[0] * cy;
-//     pos[1] = camera->zero_coords[1] + camera->delta_x[1] * cx + camera->delta_y[1] * cy;
-//     pos[2] = camera->zero_coords[2] + camera->delta_x[2] * cx + camera->delta_y[2] * cy;
-// }
+void add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy)
+{
+    pos[0] = camera->zero_coords[0] + camera->delta_x[0] * cx + camera->delta_y[0] * cy;
+    pos[1] = camera->zero_coords[1] + camera->delta_x[1] * cx + camera->delta_y[1] * cy;
+    pos[2] = camera->zero_coords[2] + camera->delta_x[2] * cx + camera->delta_y[2] * cy;
+}
 
 void	for_each_pixel(t_scene *scene)
 {
@@ -209,9 +197,8 @@ void	for_each_pixel(t_scene *scene)
 	// 	{
 			cx = 800;
 			cy = 500;
-			// add_scaled_vecs(pixel_pos, scene->camera, cx, cy);
-			ray = make_ray(scene->camera->position, cx, cy);
-			// ray = make_ray(scene->camera->position, pixel_pos);
+			add_scaled_vecs(pixel_pos, scene->camera, cx, cy);
+			ray = make_ray(scene->camera->position, pixel_pos);
 			// for testing cylinder
 			// ray.origin[0] = -50.0; 
 			// ray.origin[1] = 10.0;   
@@ -221,7 +208,7 @@ void	for_each_pixel(t_scene *scene)
 			// ray.direction[2] = 0.0;
 			closest_t = INFINITY;
 			closest_obj = NULL;
-			i = 0;
+			i = 2;
 			// while (i < scene.num_objects)
 			// {
 				is_hit = false;

@@ -8,6 +8,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
+#include "libft.h"
 
 #define EPSILON 1e-9
 #define HEIGHT 1000
@@ -104,11 +105,12 @@ void		free_window(t_app *window);
 void		make_window(t_scene *scene, t_app *window);
 
 //hooks.c
+void		update_image(t_app *window);
 void 		handle_keys(mlx_key_data_t keydata, void *param);
 void		handle_resize(int32_t width, int32_t height, void* param);
 
 //ray.c
-void	for_each_pixel(t_scene *scene);
-void	normalize(double *d);
+int32_t		color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy);
+void		normalize(double *d);
 
 #endif

@@ -175,10 +175,18 @@ void add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy)
     pos[2] = camera->zero_coords[2] + camera->delta_x[2] * cx + camera->delta_y[2] * cy;
 }
 
-void	for_each_pixel(t_scene *scene)
+static void	make_point(t_point *p, double *position, t_object *object)
 {
-	int			cx;
-	int			cy;
+	int	i;
+
+	p->object = object;
+	i = -1;
+	while (++i < 3)
+		p->point[i] = position[i];
+}
+
+int32_t	color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy)
+{
 	t_ray		ray;
 	double		t;
 	double		closest_t;
@@ -188,63 +196,48 @@ void	for_each_pixel(t_scene *scene)
 	bool		is_hit;
 	double		oc[3];
 	double		pixel_pos[3];
+	t_point		p;
 
-	// cx = 0;
-	// while (cx < WIDTH)
-	// {
-	// 	cy = 0;
-	// 	while (cy < HEIGHT)
-	// 	{
-			cx = 800;
-			cy = 500;
-			add_scaled_vecs(pixel_pos, scene->camera, cx, cy);
-			ray = make_ray(scene->camera->position, pixel_pos);
-			// for testing cylinder
-			// ray.origin[0] = -50.0; 
-			// ray.origin[1] = 10.0;   
-			// ray.origin[2] = 50.0; 
-			// ray.direction[0] = 0.0;
-			// ray.direction[1] = -1.0; 
-			// ray.direction[2] = 0.0;
-			closest_t = INFINITY;
-			closest_obj = NULL;
-			i = 2;
-			// while (i < scene.num_objects)
-			// {
-				is_hit = false;
-				if (scene->objects[i]->type == SPHERE)
-				{
-					sub_vec(oc, ray.origin, scene->objects[i]->position);
-					is_hit = hit_object(ray.direction, oc, scene->objects[i]->radius, &t);
-				}
-				else if (scene->objects[i]->type == PLANE)
-					is_hit = hit_plane(ray, scene->objects[i], &t);
-				else if (scene->objects[i]->type == CYLINDER)
-				{
-					if (hit_cylinder(ray, scene->objects[i], &t))
-						is_hit = true;
-					else if (hit_caps(ray, scene->objects[i], &t))
-						is_hit = true;
-				}
-				if (is_hit && t < closest_t)
-				{
-					closest_t = t;
-					closest_obj = scene->objects[i];
-				}
-			// }
-			if (closest_obj)
-			{
-				hit_points(hit, ray.origin, ray.direction, closest_t);
-				printf("Hit point: (%f, %f, %f)\n", hit[0], hit[1], hit[2]);
-				// apply lighting
-			}
-			else
-			{ 
-				printf("No hit\n");
-				// apply background colour
-			}
-			// cy++;
-	// 	}
-	// 	cx++;
-	// }
+	add_scaled_vecs(pixel_pos, scene->camera, cx, cy);
+	ray = make_ray(scene->camera->position, pixel_pos);
+	closest_t = INFINITY;
+	closest_obj = NULL;
+	i = 0;
+	while (i < (int)scene->num_objects)
+	{
+		is_hit = false;
+		if (scene->objects[i]->type == SPHERE)
+		{
+			sub_vec(oc, ray.origin, scene->objects[i]->position);
+			is_hit = hit_object(ray.direction, oc, scene->objects[i]->radius, &t);
+		}
+		else if (scene->objects[i]->type == PLANE)
+			is_hit = hit_plane(ray, scene->objects[i], &t);
+		else if (scene->objects[i]->type == CYLINDER)
+		{
+			if (hit_cylinder(ray, scene->objects[i], &t))
+				is_hit = true;
+			else if (hit_caps(ray, scene->objects[i], &t))
+				is_hit = true;
+		}
+		if (is_hit && t < closest_t)
+		{
+			closest_t = t;
+			closest_obj = scene->objects[i];
+		}
+		++i;
+	}
+	if (closest_obj)
+	{
+		hit_points(hit, ray.origin, ray.direction, closest_t);
+//		printf("Hit point: (%f, %f, %f)\n", hit[0], hit[1], hit[2]);
+		make_point(&p, hit, closest_obj);
+		return (get_color(&p, scene));
+	}
+	else
+	{ 
+//		printf("No hit\n");
+		// apply background colour
+		return (255 << 8 | 255);
+	}
 }

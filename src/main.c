@@ -31,9 +31,9 @@ static void run_scene(t_scene *scene)
 	t_app	window;
 
 	make_window(scene, &window);
-	window.mlx = mlx_init(HEIGHT, WIDTH, "miniRT", false);
-	window.current = mlx_new_image(window.mlx, HEIGHT, WIDTH);
-	for_each_pixel(scene);
+//	window.mlx = mlx_init(HEIGHT, WIDTH, "miniRT", false);
+//	for_each_pixel(scene);
+	update_image(&window);
 	mlx_loop(window.mlx);
 	window.exit_code = 0;
 	ft_exit(&window);

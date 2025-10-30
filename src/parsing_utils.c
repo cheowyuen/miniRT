@@ -7,6 +7,16 @@ void	cross_vec(double *target, double *a, double *b)
 	target[2] = a[0] * b[1] - a[1] * b[0];
 }
 
+void normalize(double *d)
+{
+	double	length;
+
+	length = abs_vec(d);
+	d[0] /= length;
+	d[1] /= length;
+	d[2] /= length;
+}
+
 void	setup_geometry(t_camera *c)
 {
 	double		default_up[3];

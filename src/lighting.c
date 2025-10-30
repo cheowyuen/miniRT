@@ -1,14 +1,47 @@
 #include "minirt.h"
 
+static double	min_distance(t_ray *ray, t_object *object)
+{
+	double	temp[3];
+	double	t;
+	bool	is_hit;
+
+	t = INFINITY;
+	if (object->type == SPHERE)
+	{
+		sub_vec(temp, ray->origin, object->position);
+		is_hit = (ray->direction, temp, object->radius, &t);
+	}
+	if (object->type == PLANE)
+		is_hit = hit_plane(ray, object, &t);
+	if (object->type == CYLINDER)
+	{
+		if (hit_cylinder(ray, object, &t))
+			is_hit = true;
+		else if (hit_caps(ray, object, &t))
+			is_hit = true;
+	}
+	return (t);
+}
+
 static bool	is_visible(t_point *p, t_light *l, t_object **objects, size_t count)
 {
-	(void)p;
-	(void)l;
-	(void)objects;
-	if (count % 2)
-		return (true);
-	else
-		return (false);
+	double	distance;
+	size_t	i;
+	t_ray	ray;
+	double	t;
+
+	i = 0;
+	sub_vec(temp, l->position, p->point);
+	distance = abs_vec(temp);
+	ray = make_ray(p->point, l->position);
+	while (i < count)
+	{
+		if (min_distance(&ray, objects[i]) < distance)
+			return (false);
+		++i;
+	}
+	return (true);
 }
 
 int32_t	get_color(t_point *p, t_scene *s)

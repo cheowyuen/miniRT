@@ -115,6 +115,7 @@ bool	hit_cylinder(t_ray ray, t_object *cylinder, double *t)
 	double	d_perp[3];
 	double	oc_perp[3];
 	double	d_perp2;
+	double	temp_t;
 
 	sub_vec(oc, ray.origin, cylinder->position);
 	proj_perpendicular(ray.direction, cylinder->orientation, d_perp);
@@ -122,7 +123,12 @@ bool	hit_cylinder(t_ray ray, t_object *cylinder, double *t)
 	d_perp2 = dot_prod(d_perp, d_perp);
 	if (d_perp2 < 1e-6)
 		return (false);
-	return (hit_object(d_perp, oc_perp, cylinder->radius, t));
+	if (!hit_object(d_perp, oc_perp, cylinder->radius, &temp_t))
+		return (false);
+	if (!hit_height(temp_t, ray, cylinder))
+		return (false);
+	*t = temp_t;
+	return (true);
 }
 
 bool	hit_plane(t_ray ray, t_object *plane, double *t)
@@ -142,16 +148,6 @@ bool	hit_plane(t_ray ray, t_object *plane, double *t)
 	// 	return (false);
 	// return (true);
 	return (*t >= 0);
-}
-
-void normalize(double *d)
-{
-	double	length;
-
-	length = abs_vec(d);
-	d[0] /= length;
-	d[1] /= length;
-	d[2] /= length;
 }
 
 t_ray	make_ray(double *origin, double pixel_pos[3])

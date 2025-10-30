@@ -238,6 +238,6 @@ int32_t	color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy)
 	{ 
 //		printf("No hit\n");
 		// apply background colour
-		return (255 << 8 | 255);
+		return (255);
 	}
 }

@@ -17,6 +17,7 @@ int32_t	get_color(t_point *p, t_scene *s)
 	double	ambient;
 	double	light;
 
+	return (p->object->color | 255);
 	ambient = s->ambient->intensity;
 	light = get_light_intensity(p, s);
 	light_mask = (ambient + light) * 255; //scale according to number of lights?

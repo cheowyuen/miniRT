@@ -6,12 +6,12 @@ t_camera	*make_camera(char *str)
 
 	(void)str;
 	camera = malloc(sizeof(t_camera));
-	camera->position[0] = -50.0;
+	camera->position[0] = 0.0;
 	camera->position[1] = 0.0;
-	camera->position[2] = 20.0;
+	camera->position[2] = 5.0;
 	camera->direction[0] = 0.0;
 	camera->direction[1] = 0.0;
-	camera->direction[2] = 1.0;
+	camera->direction[2] = -1.0;
 	camera->fov = 70;
 	setup_geometry(camera);
 	return (camera);
@@ -39,12 +39,14 @@ t_object	*make_object(char *str)
 	object = malloc(sizeof(t_object));
 	object->type = PLANE;
 	object->position[0] = 0.0;
-	object->position[1] = 0.0;
+	object->position[1] = -0.5;
 	object->position[2] = 0.0;
 	object->orientation[0] = 0.0;
 	object->orientation[1] = 1.0;
 	object->orientation[2] = 0.0;
-	object->color = (225 << 8 | 255);
+	object->radius = 1.0;
+	object->height = 5.0;
+	object->color = (225 << 8 | 0);
 	return (object);
 }
 
@@ -66,18 +68,14 @@ t_scene	*parse_scene(char *filename)
 	s->objects[1] = make_object("input line");
 	s->objects[2] = make_object("input line");
 	s->objects[1]->type = SPHERE;
-	s->objects[1]->position[0] = -50;
-	s->objects[1]->position[2] = 50;
-	s->objects[1]->radius = 5;
-	s->objects[0]->type = PLANE;
-	s->objects[0]->position[2] = 30;
-	s->objects[0]->orientation[1] = 0.0;
-	s->objects[0]->orientation[2] = 1.0;
+	s->objects[1]->position[1] = 0;
+	s->objects[1]->color = s->objects[1]->color << 8;
 	s->objects[2]->type = CYLINDER;
-	s->objects[2]->position[0] = -50.0;
-	s->objects[2]->position[2] = 50.0;
-	s->objects[2]->orientation[1] = 1.0;
-	s->objects[2]->radius = 2.0;
-	s->objects[2]->height = 6.0;
+	s->objects[2]->position[0] = 2.0;
+	s->objects[2]->position[1] = 0.0;
+	s->objects[2]->position[2] = 0.0;
+	s->objects[2]->radius = 0.5;
+	s->objects[2]->height = 2.0;
+	s->objects[2]->color = s->objects[2]->color << 16;
 	return (s);
 }

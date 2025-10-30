@@ -10,26 +10,28 @@ static double	min_distance(t_ray *ray, t_object *object)
 	if (object->type == SPHERE)
 	{
 		sub_vec(temp, ray->origin, object->position);
-		is_hit = (ray->direction, temp, object->radius, &t);
+		is_hit = hit_object(ray->direction, temp, object->radius, &t);
 	}
 	if (object->type == PLANE)
-		is_hit = hit_plane(ray, object, &t);
+		is_hit = hit_plane(*ray, object, &t);
 	if (object->type == CYLINDER)
 	{
-		if (hit_cylinder(ray, object, &t))
+		if (hit_cylinder(*ray, object, &t))
 			is_hit = true;
-		else if (hit_caps(ray, object, &t))
+		else if (hit_caps(*ray, object, &t))
 			is_hit = true;
 	}
-	return (t);
+	if (is_hit)
+		return (t);
+	return (INFINITY);
 }
 
 static bool	is_visible(t_point *p, t_light *l, t_object **objects, size_t count)
 {
 	double	distance;
+	double	temp[3];
 	size_t	i;
 	t_ray	ray;
-	double	t;
 
 	i = 0;
 	sub_vec(temp, l->position, p->point);

@@ -113,5 +113,10 @@ void		handle_resize(int32_t width, int32_t height, void* param);
 //ray.c
 int32_t		color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy);
 void		normalize(double *d);
+bool		hit_caps(t_ray ray, t_object *cylinder, double *t);
+bool		hit_object(double *dir, double *oc, double r, double *t);
+bool		hit_cylinder(t_ray ray, t_object *cylinder, double *t);
+bool		hit_plane(t_ray ray, t_object *plane, double *t);
+t_ray		make_ray(double *origin, double pixel_pos[3]);
 
 #endif

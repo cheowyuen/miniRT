@@ -20,16 +20,27 @@ t_light	*make_light(char *str, t_scene *scene, bool ambient)
 {
 	t_light *light;
 	int		i;
+	ssize_t	temp;
 
 	light = malloc(sizeof(t_light));
 	if (!light)
 		parse_error("malloc error: ", strerror(errno), scene);
 	ft_memset(light, 0, sizeof(t_light));
-	i = 0;
-	light->position[0] = -40.0;
-	light->position[1] = 50.0;
-	light->position[2] = 0.0;
-	light->intensity = 0.2;
+	i = 1;
+	while (ft_isspace(str[i++]))
+		continue;
+	if (!ambient)
+	{
+		temp = parse_triplet(light->position, str);
+		if (temp == -1)
+			parse_error("error parsing position on line: ", str, scene);
+		else
+			i += temp;
+	}
+ 	light->intensity = ft_atod(str + i, &i, ' ');
+	if (i <= 0)
+		parse_error("error parsing intensity on line: ", str, scene);
+	
 	light->is_ambient = ambient;
 	return (light);
 }
@@ -60,7 +71,12 @@ void	check_and_add_line(char *line, t_scene *s)
 	if (*line == 'A')
 		make_light(line, s, true);
 	if (*line == 'C')
-		make_camera
+		make_camera(line, s);
+	if (!ft_strcmp(line, "pl") || !ft_strcmp(line, "cy") ||\
+!ft_strcmp(line, "sp"))
+		make_object(line, s);
+	else
+		parse_error("Unrecognised format of line: ", line);
 }
 
 void	parse_error(char *msg, char *arg, void *scene)

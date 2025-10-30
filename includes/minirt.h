@@ -32,7 +32,7 @@ typedef struct s_light{
 	double	position[3];
 	bool	is_ambient;
 	double	intensity;
-	//int32_t color;
+	int32_t color;
 } t_light;
 
 typedef struct s_object{

@@ -7,14 +7,15 @@ static double	min_distance(t_ray *ray, t_object *object)
 	bool	is_hit;
 
 	t = INFINITY;
+	is_hit = false;
 	if (object->type == SPHERE)
 	{
 		sub_vec(temp, ray->origin, object->position);
 		is_hit = hit_object(ray->direction, temp, object->radius, &t);
 	}
-	if (object->type == PLANE)
+	else if (object->type == PLANE)
 		is_hit = hit_plane(*ray, object, &t);
-	if (object->type == CYLINDER)
+	else if (object->type == CYLINDER)
 	{
 		if (hit_cylinder(*ray, object, &t))
 			is_hit = true;
@@ -26,6 +27,8 @@ static double	min_distance(t_ray *ray, t_object *object)
 	return (INFINITY);
 }
 
+//goes through the list of objects: if the one with the smallest distance is 
+//less than the distance to the light, return false, else return true
 static bool	is_visible(t_point *p, t_light *l, t_object **objects, size_t count)
 {
 	double	distance;
@@ -48,14 +51,18 @@ static bool	is_visible(t_point *p, t_light *l, t_object **objects, size_t count)
 
 int32_t	get_color(t_point *p, t_scene *s)
 {
-	int8_t	light_mask;
+	int		light_mask;
 	double	ambient;
 	double	light;
 
-	return (p->object->color | 255);
+	//return (p->object->color | 255);
 	ambient = s->ambient->intensity;
 	light = get_light_intensity(p, s);
 	light_mask = (ambient + light) * 255; //scale according to number of lights?
+	if (light_mask < 0)
+		light_mask = 0;
+	if (light_mask > 255)
+		light_mask = 255;
 	return (p->object->color | light_mask);
 }
 
@@ -73,8 +80,11 @@ double get_light_intensity(t_point *p, t_scene *s)
 		if(is_visible(p, s->lights[i], s->objects, s->num_objects))
 		{
 			make_normal_vector(p);
+			mult_vec(normal, p->normal, 1.0/abs_vec(p->normal));
 			sub_vec(light_to_point, p->point, s->lights[i]->position);
-			total += dot_prod(normal, light_to_point) / (abs_vec(light_to_point));
+			normalize(light_to_point);
+			total += dot_prod(normal, light_to_point) / \
+(abs_vec(light_to_point) * abs_vec(light_to_point));
 		}
 	}
 	return (total);

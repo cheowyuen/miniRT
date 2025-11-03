@@ -61,9 +61,10 @@ t_scene	*parse_scene(char *filename)
 	s->ambient->is_ambient = true;
 	s->num_lights = 1;
 	s->lights = malloc(sizeof(t_light *) * s->num_lights);
+	s->lights[0] = make_light("input line");
+	s->lights[0]->intensity = 0.6;
 	s->num_objects = 3;
 	s->objects = malloc(sizeof(t_object *) * s->num_objects);
-	s->lights[0] = make_light("input line");
 	s->objects[0] = make_object("input line");
 	s->objects[1] = make_object("input line");
 	s->objects[2] = make_object("input line");

@@ -6,7 +6,7 @@
 #    By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 07:14:17 by cwong             #+#    #+#              #
-#    Updated: 2025/06/28 18:14:29 by cwong            ###   ########.fr        #
+#    Updated: 2025/11/04 10:49:34 by nraatika         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,9 @@ SRCS	:= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 		   ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c ft_strrchr.c \
 		   ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c ft_printf.c\
 		   ft_printf_utils.c
+
+SRCS	+= get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+
 
 OBJS	:= $(SRCS:.c=.o)
 

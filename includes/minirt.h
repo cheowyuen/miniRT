@@ -10,6 +10,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 #include "libft.h"
 
 #define EPSILON 1e-9
@@ -47,10 +48,11 @@ typedef struct s_object{
 typedef struct s_scene{
 	t_camera	*camera;
 	t_light		*ambient;
-	t_light		**lights;
-	size_t		num_lights;
+	t_light		*light;
 	t_object	**objects;
 	size_t		num_objects;
+	char		*line;
+	int			fd;
 } t_scene;
 
 typedef struct s_point{
@@ -67,11 +69,22 @@ typedef struct s_app{
 } t_app;
 
 //parsing.c
-t_camera	*make_camera(char *str);
-t_light		*make_light(char *str);
-t_object	*make_object(char *str);
 t_scene		*parse_scene(char *filename);
-void 		free_scene(t_scene *scene);
+void		check_requirements(t_scene *scene);
+t_camera	*make_camera(char *str, t_scene *scene);
+t_light		*make_light(char *str, t_scene *scene, bool ambient);
+void		parse_plane(char *str, t_object *object, t_scene *scene);
+void		parse_sphere(char *str, t_object *object, t_scene *scene);
+void		parse_cylinder(char *str, t_object *object, t_scene *scene);
+void		make_object(char *str, t_scene *scene);
+void		check_and_add_line(char *line, t_scene *s);
+void		parse_error(char *msg, char *arg, void *scene, void *object);
+
+//parse_utils.c
+double 		ft_atod(char *line, int *read, char delimiter);
+ssize_t		parse_color(int32_t *color, char *str);
+ssize_t		parse_triplet(double *target, char *str);
+
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);
@@ -89,6 +102,7 @@ double		get_light_intensity(t_point *p, t_scene *s);
 
 //main.c
 void		ft_exit(void *param);
+void 		free_scene(t_scene *scene);
 
 //window.c
 void		free_window(t_app *window);

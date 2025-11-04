@@ -17,12 +17,11 @@ void free_scene(t_scene *scene)
 
 	free(scene->camera);
 	free(scene->ambient);
-	i = -1;
-	while (++i < (int)scene->num_lights)
-		free(scene->lights[i]);
+	free(scene->light);
 	i = -1;
 	while (++i < (int)scene->num_objects)
 		free(scene->objects[i]);
+	free(scene->objects);
 	free(scene);
 }
 

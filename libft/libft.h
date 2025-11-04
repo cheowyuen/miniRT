@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 11:11:35 by cwong             #+#    #+#             */
-/*   Updated: 2025/07/01 07:21:09 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/04 10:48:04 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdint.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include "get_next_line/get_next_line.h"
 
 typedef struct s_list
 {

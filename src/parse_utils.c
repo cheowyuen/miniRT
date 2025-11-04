@@ -64,8 +64,11 @@ double ft_atod(char *line, int *read, char delimiter)
 		return (value * sign);
 	line = line + i;
 	i = parse_fractions(&value, line, read, delimiter);
-	if (i <= 0)
+	if (i < 0)
+	{
+		*read = -1;
 		return (value * sign);
+	}
 	return (value * sign);
 }
 
@@ -79,20 +82,22 @@ ssize_t	parse_color(int32_t *color, char *str)
 	i = 0;
 	while (channel < 3)
 	{
+		temp = 0;
 		while (ft_isdigit(str[i]) && str[i] && i < 3)
 		{
 			temp *= 10;
 			temp += str[i] - '0';
 			++i;
 		}
-		if ((str[i] != ',' || (channel == 2 && str[i] == '\0') || temp > 255)
+		if (i == 0 || str[i] != ',' || (channel == 2 && str[i] == '\0') || temp > 255)
 			return (-1);
 		else
 			++i;
-		*color = (*color << 8) | (temp & 255);
+		*color = (*color << 8) | temp;
 		++channel;
 	}
 	*color = (*color << 8);
+	return (i);
 }
 
 ssize_t	parse_triplet(double *target, char *str)

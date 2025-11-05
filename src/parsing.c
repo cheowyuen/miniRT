@@ -119,6 +119,7 @@ void	parse_plane(char *str, t_object *object, t_scene *scene)
 	temp = parse_color(&object->color, str + i);
 	if (temp == -1)
 		parse_error("error parsing color on line: ", str, scene, object);
+	object->type = PLANE;
 }
 
 void	parse_sphere(char *str, t_object *object, t_scene *scene)
@@ -139,6 +140,7 @@ void	parse_sphere(char *str, t_object *object, t_scene *scene)
 	temp = parse_color(&object->color, str + i);
 	if (temp == -1)
 		parse_error("error parsing color on line: ", str, scene, object);
+	object->type = SPHERE;
 }
 
 void	parse_cylinder(char *str, t_object *object, t_scene *scene)
@@ -166,6 +168,7 @@ void	parse_cylinder(char *str, t_object *object, t_scene *scene)
 	temp = parse_color(&object->color, str + i);
 	if (temp == -1)
 		parse_error("error parsing color on line: ", str, scene, object);
+	object->type = CYLINDER;
 }
 
 //makes an object of the specified type and adds it to the array

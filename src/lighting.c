@@ -29,20 +29,25 @@ static double	min_distance(t_ray *ray, t_object *object)
 
 //goes through the list of objects: if the one with the smallest distance is 
 //less than the distance to the light, return false, else return true
+//to offset the point so it doesn't self-shadow, move point a tiny bit in the 
+//direction of the normal
 static bool	is_visible(t_point *p, t_light *l, t_object **objects, size_t count)
 {
 	double	distance;
 	double	temp[3];
+	double	offset_point[3];
 	size_t	i;
 	t_ray	ray;
 
-	i = 0;
-	sub_vec(temp, l->position, p->point);
+	mult_vec(temp, p->normal, 0.001f); //move the offsetting to the point calculation for efficency?
+	add_vec(offset_point, p->point, temp);
+	sub_vec(temp, l->position, offset_point);
 	distance = abs_vec(temp);
-	ray = make_ray(p->point, l->position);
+	ray = make_ray(offset_point, l->position);
+	i = 0;
 	while (i < count)
 	{
-		if (min_distance(&ray, objects[i]) < distance)
+		if (objects[i] != p->object && min_distance(&ray, objects[i]) < distance)
 			return (false);
 		++i;
 	}
@@ -55,7 +60,7 @@ int32_t	get_color(t_point *p, t_scene *s)
 	double	ambient;
 	double	light;
 
-	//return (p->object->color | 255);
+//	return (p->object->color | 255);
 	ambient = s->ambient->intensity;
 	light = get_light_intensity(p, s);
 	light_mask = (ambient + light) * 255; //scale according to number of lights?
@@ -76,10 +81,12 @@ double get_light_intensity(t_point *p, t_scene *s)
 	if(is_visible(p, s->light, s->objects, s->num_objects))
 	{
 		make_normal_vector(p);
-		mult_vec(normal, p->normal, 1.0 / abs_vec(p->normal));
-		sub_vec(light_to_point, p->point, s->light->position);
+		mult_vec(normal, p->normal, 1.0f / abs_vec(p->normal));
+		sub_vec(light_to_point, s->light->position, p->point);
 		normalize(light_to_point);
+//		total = fmax(0.0f, dot_prod(normal, light_to_point));
 		total = dot_prod(normal, light_to_point);
+//		printf("light intensity %f\n", total);
 	}
 	return (total);
 }

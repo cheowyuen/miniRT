@@ -2,9 +2,11 @@
 
 void	hit_points(double *hit, double *origin, double *direction, double t)
 {
-	hit[0] = origin[0] + t * direction[0];
-	hit[1] = origin[1] + t * direction[1];
-	hit[2] = origin[2] + t * direction[2];
+	// hit[0] = origin[0] + t * direction[0];
+	// hit[1] = origin[1] + t * direction[1];
+	// hit[2] = origin[2] + t * direction[2];
+	mult_vec(hit, direction, t);
+	add_vec(hit, hit, origin);
 }
 
 void	proj_perpendicular(double *vec, double *axis, double *result)
@@ -12,9 +14,11 @@ void	proj_perpendicular(double *vec, double *axis, double *result)
 	double	dot;
 
 	dot = dot_prod(vec, axis);
-	result[0] = vec[0] - dot * axis[0];
-	result[1] = vec[1] - dot * axis[1];
-	result[2] = vec[2] - dot * axis[2];
+	// result[0] = vec[0] - dot * axis[0];
+	// result[1] = vec[1] - dot * axis[1];
+	// result[2] = vec[2] - dot * axis[2];
+	mult_vec(result, axis, dot);
+	sub_vec(result, vec, result);
 }
 
 bool	hit_disk(double *center, t_ray ray, t_object *cylinder, double *t)
@@ -50,9 +54,11 @@ bool	hit_caps(t_ray ray, t_object *cylinder, double *t)
 	
 	if (hit_disk(cylinder->position, ray, cylinder, t))
 		return (true);
-	cap_center[0] = cylinder->position[0] + cylinder->orientation[0] * cylinder->height;
-	cap_center[1] = cylinder->position[1] + cylinder->orientation[1] * cylinder->height;
-	cap_center[2] = cylinder->position[2] + cylinder->orientation[2] * cylinder->height;
+	// cap_center[0] = cylinder->position[0] + cylinder->orientation[0] * cylinder->height;
+	// cap_center[1] = cylinder->position[1] + cylinder->orientation[1] * cylinder->height;
+	// cap_center[2] = cylinder->position[2] + cylinder->orientation[2] * cylinder->height;
+	mult_vec(cap_center, cylinder->orientation, cylinder->height);
+	add_vec(cap_center, cap_center, cylinder->position);
 	if (hit_disk(cap_center, ray, cylinder, t))
 		return (true);
 	return (false);
@@ -64,12 +70,15 @@ bool	hit_height(double t, t_ray ray, t_object *cylinder)
 	double height;
 	double vec[3];
 
-	ray_step[0] = t * ray.direction[0];
-	ray_step[1] = t * ray.direction[1];
-	ray_step[2] = t * ray.direction[2];
-	vec[0] = ray.origin[0] + ray_step[0] - cylinder->position[0];
-	vec[1] = ray.origin[1] + ray_step[1] - cylinder->position[1];
-	vec[2] = ray.origin[2] + ray_step[2] - cylinder->position[2];
+	// ray_step[0] = t * ray.direction[0];
+	// ray_step[1] = t * ray.direction[1];
+	// ray_step[2] = t * ray.direction[2];
+	// vec[0] = ray.origin[0] + ray_step[0] - cylinder->position[0];
+	// vec[1] = ray.origin[1] + ray_step[1] - cylinder->position[1];
+	// vec[2] = ray.origin[2] + ray_step[2] - cylinder->position[2];
+	mult_vec(ray_step, ray.direction, t);
+	add_vec(vec, ray_step, ray.origin);
+	sub_vec(vec, vec, cylinder->position);
 	height = dot_prod(vec, cylinder->orientation);
 	if (height < 0 || height > cylinder->height)
 		return (false);
@@ -157,9 +166,10 @@ t_ray	make_ray(double *origin, double pixel_pos[3])
 	ray.origin[0] = origin[0];
 	ray.origin[1] = origin[1];
 	ray.origin[2] = origin[2];
-	ray.direction[0] = pixel_pos[0] - origin[0];
-	ray.direction[1] = pixel_pos[1] - origin[1];
-	ray.direction[2] = pixel_pos[2] - origin[2];
+	// ray.direction[0] = pixel_pos[0] - origin[0];
+	// ray.direction[1] = pixel_pos[1] - origin[1];
+	// ray.direction[2] = pixel_pos[2] - origin[2];
+	sub_vec(ray.direction, pixel_pos, origin);
 	normalize(ray.direction);
 	return (ray);
 }

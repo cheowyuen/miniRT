@@ -83,6 +83,7 @@ void 		free_scene(t_scene *scene);
 void		cross_vec(double *target, double *a, double *b);
 void		normalize(double *d);
 void		setup_geometry(t_camera *c);
+void		cal_right(double *right, double *default_up, t_camera *c);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);

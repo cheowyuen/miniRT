@@ -24,11 +24,40 @@ void	update_image(t_app *window)
 	window->current = new;
 }
 
-static void	move_camera(keys_t key, t_scene *scene)
+static void	cal_move(double *move, double *direction, double step)
 {
-	printf("The camera will move in direction %d\n", key);
-	(void)scene;
-//	update_image(scene);
+	double	scaled[3];
+
+	mult_vec(scaled, direction, step);
+	add_vec(move, move, scaled);
+}
+
+static void	move_camera(keys_t key, t_app *window)
+{
+	double 		step;
+	double 		move[3];
+	double 		right[3];
+	double 		default_up[3];
+	t_camera	*c;
+
+	c = window->scene->camera;
+	step = 0.1;
+	ft_bzero(move, sizeof(move));
+	cal_right(right, default_up, c);
+	if (key == MLX_KEY_Q)
+		cal_move(move,  default_up, step);
+	else if (key == MLX_KEY_E)
+		cal_move(move,  default_up, -step);
+	else if (key == MLX_KEY_A)
+		cal_move(move, right, -step);
+	else if (key == MLX_KEY_D)
+		cal_move(move, right, step);
+	else if (key == MLX_KEY_W)
+		cal_move(move,  c->direction, step);
+	else if (key == MLX_KEY_S)
+		cal_move(move,  c->direction, -step);
+	add_vec(c->position, c->position, move);
+	update_image(window);
 }
 
 static void	pan_camera(keys_t key, t_scene *scene)
@@ -90,7 +119,7 @@ void	handle_keys(mlx_key_data_t keydata, void *param)
 		ft_exit(window);
 	}
 	if (is_movement_key(keydata.key) && keydata.action == MLX_PRESS)
-		move_camera(keydata.key, window->scene);
+		move_camera(keydata.key, window);
 	if (is_pan_key(keydata.key) && keydata.action == MLX_PRESS)
 		pan_camera(keydata.key, window->scene);
 }

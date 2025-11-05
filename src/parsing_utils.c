@@ -17,17 +17,8 @@ void normalize(double *d)
 	d[2] /= length;
 }
 
-void	setup_geometry(t_camera *c)
+void	cal_right(double *right, double *default_up, t_camera *c)
 {
-	double		default_up[3];
-	double		right[3];
-	double		up[3];
-	double		vw;
-	double		vh;
-	double		fov_rad;
-	int			i;
-
-	normalize(c->direction);
 	default_up[0] = 0.0;
 	default_up[1] = 1.0;
 	default_up[2] = 0.0;
@@ -39,6 +30,20 @@ void	setup_geometry(t_camera *c)
 	}
 	cross_vec(right, c->direction, default_up);
 	normalize(right);
+}
+
+void	setup_geometry(t_camera *c)
+{
+	double		default_up[3];
+	double		right[3];
+	double		up[3];
+	double		vw;
+	double		vh;
+	double		fov_rad;
+	int			i;
+
+	normalize(c->direction);
+	cal_right(right, default_up, c);
 	cross_vec(up, right, c->direction);
 	normalize(up);
 	fov_rad = c->fov * M_PI / 180.0;

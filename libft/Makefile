@@ -6,12 +6,12 @@
 #    By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 07:14:17 by cwong             #+#    #+#              #
-#    Updated: 2025/11/04 10:49:34 by nraatika         ###   ########.fr        #
+#    Updated: 2025/11/04 11:55:44 by nraatika         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		:= cc
-CFLAGS	:= -Wall -Wextra -Werror
+CFLAGS	:= -Wall -Wextra -Werror -g
 
 NAME	:= libft.a
 

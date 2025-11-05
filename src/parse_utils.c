@@ -83,13 +83,13 @@ ssize_t	parse_color(int32_t *color, char *str)
 	while (channel < 3)
 	{
 		temp = 0;
-		while (ft_isdigit(str[i]) && str[i] && i < 3)
+		while (ft_isdigit(str[i]) && str[i])
 		{
 			temp *= 10;
 			temp += str[i] - '0';
 			++i;
 		}
-		if (i == 0 || str[i] != ',' || (channel == 2 && str[i] == '\0') || temp > 255)
+		if (i == 0 || (str[i] != ',' && !(channel == 2 && str[i] == '\0')) || temp > 255)
 			return (-1);
 		else
 			++i;
@@ -119,6 +119,7 @@ ssize_t	parse_triplet(double *target, char *str)
 		count += read;
 		target[index++] = temp;
 	}
+	read = 0;
 	temp = ft_atod(str, &read, ' ');
 	if (read == -1)
 		return (-1);

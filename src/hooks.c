@@ -1,20 +1,41 @@
 #include "minirt.h"
 
-static void	update_image(t_scene *scene)
+void	update_image(t_app *window)
 {
-	(void)scene;
+	uint32_t	xy[2];
+	int32_t		color;
+	mlx_image_t	*new;
+
+	ft_memset(xy, 0, sizeof(uint32_t) * 2);
+	new = mlx_new_image(window->mlx, WIDTH, HEIGHT);
+	while (xy[0] < WIDTH)
+	{
+		while (xy[1] < HEIGHT)
+		{
+			color = color_of_pixel(window->scene, xy[0], xy[1]);
+			mlx_put_pixel(new, xy[0], xy[1], color);
+			++xy[1];
+		}
+		xy[1] = 0;
+		++xy[0];
+	}
+	mlx_delete_image(window->mlx, window->current);
+	mlx_image_to_window(window->mlx, new, 0, 0);
+	window->current = new;
 }
 
 static void	move_camera(keys_t key, t_scene *scene)
 {
 	printf("The camera will move in direction %d\n", key);
-	update_image(scene);
+	(void)scene;
+//	update_image(scene);
 }
 
 static void	pan_camera(keys_t key, t_scene *scene)
 {
 	printf("The camera will pan in direction %d\n", key);
-	update_image(scene);
+	(void)scene;
+//	update_image(scene);
 }
 
 static bool	is_pan_key(keys_t key)

@@ -9,7 +9,7 @@ void	add_vec(double *target, double *a, double *b)
 	target[2] = a[2] + b[2];
 }
 
-//subtract two vectors, store result in target.
+//subtract two vectors, store result in target. t = a - b
 void	sub_vec(double *target, double *a, double *b)
 {
 	target[0] = a[0] - b[0];

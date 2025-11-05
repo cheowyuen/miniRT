@@ -1,5 +1,6 @@
 *.o
 *.a
 obj/
+/MLX/build
 miniRT
 .vscode

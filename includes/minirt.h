@@ -24,9 +24,12 @@ typedef enum e_type{
 } t_type;
 
 typedef struct s_camera{
-	double position[3];
-	double direction[3];
-	double fov;
+	double	position[3];
+	double	direction[3];
+	double	fov;
+	double	zero_coords[3];
+	double	delta_x[3];
+	double	delta_y[3];
 } t_camera;
 
 typedef struct s_light{
@@ -68,6 +71,11 @@ typedef struct s_app{
 	int			exit_code;
 } t_app;
 
+typedef struct s_ray{
+	double	origin[3];
+	double	direction[3];
+} t_ray;
+
 //parsing.c
 t_scene		*parse_scene(char *filename);
 void		check_requirements(t_scene *scene);
@@ -85,6 +93,11 @@ double 		ft_atod(char *line, int *read, char delimiter);
 ssize_t		parse_color(int32_t *color, char *str);
 ssize_t		parse_triplet(double *target, char *str);
 
+
+//parsing_utils.c
+void		cross_vec(double *target, double *a, double *b);
+void		normalize(double *d);
+void		setup_geometry(t_camera *c);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);
@@ -109,7 +122,17 @@ void		free_window(t_app *window);
 void		make_window(t_scene *scene, t_app *window);
 
 //hooks.c
+void		update_image(t_app *window);
 void 		handle_keys(mlx_key_data_t keydata, void *param);
 void		handle_resize(int32_t width, int32_t height, void* param);
+
+//ray.c
+int32_t		color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy);
+void		normalize(double *d);
+bool		hit_caps(t_ray ray, t_object *cylinder, double *t);
+bool		hit_object(double *dir, double *oc, double r, double *t);
+bool		hit_cylinder(t_ray ray, t_object *cylinder, double *t);
+bool		hit_plane(t_ray ray, t_object *plane, double *t);
+t_ray		make_ray(double *origin, double pixel_pos[3]);
 
 #endif

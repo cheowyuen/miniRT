@@ -26,10 +26,16 @@ void	update_image(t_app *window)
 
 static void	cal_move(double *move, double *direction, double step)
 {
-	double	scaled[3];
+	// double	scaled[3];
 
-	mult_vec(scaled, direction, step);
-	add_vec(move, move, scaled);
+	// mult_vec(scaled, direction, step);
+	// printf("scaled: %f, %f, %f\n", scaled[0], scaled[1], scaled[2]);
+	// add_vec(move, move, scaled);
+	// printf("move after add_vec: %f, %f, %f\n", move[0], move[1], move[2]);
+
+	move[0] += direction[0] * step;
+    move[1] += direction[1] * step;
+    move[2] += direction[2] * step;
 }
 
 static void	move_camera(keys_t key, t_app *window)
@@ -38,12 +44,15 @@ static void	move_camera(keys_t key, t_app *window)
 	double 		move[3];
 	double 		right[3];
 	double 		default_up[3];
-	t_camera	*c;
+	t_scene		*s;
+	// double		up[3];
 
-	c = window->scene->camera;
+	s = window->scene;
 	step = 0.1;
 	ft_bzero(move, sizeof(move));
-	cal_right(right, default_up, c);
+	cal_right(right, default_up, s->camera);
+	printf("up:%f, %f, %f\n", default_up[0], default_up[1], default_up[2]);
+	printf("dir: %f, %f, %f\n", s->camera->direction[0], s->camera->direction[1], s->camera->direction[2]);
 	if (key == MLX_KEY_Q)
 		cal_move(move,  default_up, step);
 	else if (key == MLX_KEY_E)
@@ -53,10 +62,20 @@ static void	move_camera(keys_t key, t_app *window)
 	else if (key == MLX_KEY_D)
 		cal_move(move, right, step);
 	else if (key == MLX_KEY_W)
-		cal_move(move,  c->direction, step);
+		cal_move(move,  s->camera->direction, step);
 	else if (key == MLX_KEY_S)
-		cal_move(move,  c->direction, -step);
-	add_vec(c->position, c->position, move);
+		cal_move(move,  s->camera->direction, -step);
+	printf("move:%f, %f, %f\n", move[0], move[1], move[2]);
+	if (s->selected_type == SELECT_OBJECT)
+	{
+		printf("pos ori:%f, %f, %f\n", s->objects[s->selected_index]->position[0], s->objects[s->selected_index]->position[1], s->objects[s->selected_index]->position[2]);
+		add_vec(s->objects[s->selected_index]->position, s->objects[s->selected_index]->position, move);
+		printf("pos:%f, %f, %f\n", s->objects[s->selected_index]->position[0], s->objects[s->selected_index]->position[1], s->objects[s->selected_index]->position[2]);
+	}
+	else if (s->selected_type == SELECT_LIGHT)
+		add_vec(s->lights[s->selected_index]->position, s->lights[s->selected_index]->position, move);
+	else if (s->selected_type == SELECT_CAMERA)
+		add_vec(s->camera->position, s->camera->position, move);
 	update_image(window);
 }
 
@@ -84,7 +103,7 @@ static void	pan_camera(keys_t key, t_app *window)
 	double 		vec[3];
 	double 		right[3];
 	t_camera	*c;
-	
+
 	c = window->scene->camera;
 	angle = 0.05;
 	cross_vec(right, c->direction, c->up);
@@ -165,6 +184,7 @@ void	cycle_selection(t_scene *s)
 		s->selected_index++;
 		if (s->selected_index >= s->num_lights)
 		{
+			printf("camera\n");
 			s->selected_type = SELECT_CAMERA;
 			s->selected_index = 0;
 		}

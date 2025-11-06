@@ -14,6 +14,8 @@
 #include "libft.h"
 
 #define EPSILON 1e-9
+#define	LINEAR 0.01f
+#define	QUAD 0.001f
 #define HEIGHT 1000
 #define WIDTH 1000
 

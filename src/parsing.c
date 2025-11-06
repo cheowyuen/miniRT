@@ -202,7 +202,7 @@ void	make_object(char *str, t_scene *scene)
 
 void	check_and_add_line(char *line, t_scene *s)
 {
-	if (*line == '\n' && ft_strlen(line) == 1)
+	if (!*line)
 		return ;
 	if (*line == 'L')
 	{

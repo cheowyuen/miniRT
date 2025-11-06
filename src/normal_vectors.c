@@ -13,7 +13,7 @@ static void	cylinder_normal(t_point *p)
 	if (fabs(length) - (p->object->height / 2) < EPSILON) //on one of the ends
 		mult_vec(p->normal, p->object->orientation, copysign(1.0, length)); //copysign returns the magnitude of first arg with sign of second, so this multiplies by 1.0 or -1.0
 	else
-	{//on the curved surface
+	{
 		mult_vec(temp, p->object->position, length);
 		add_vec(projection, p->object->position, temp);
 		sub_vec(p->normal, center_to_point, projection);
@@ -24,7 +24,7 @@ static void	cylinder_normal(t_point *p)
 void make_normal_vector(t_point *p)
 {
 	if (p->object->type == PLANE)
-		mult_vec(p->normal, p->object->orientation, 1); //TODO: figure out when it needs to be -1
+		mult_vec(p->normal, p->object->orientation, 1);
 	if (p->object->type == SPHERE)
 	{
 		sub_vec(p->normal, p->point, p->object->position);

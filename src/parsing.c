@@ -13,7 +13,7 @@ t_camera	*make_camera(char *str)
 	camera->direction[1] = 0.0;
 	camera->direction[2] = -1.0;
 	camera->fov = 70;
-	setup_geometry(camera);
+	setup_geometry(camera, true);
 	return (camera);
 }
 
@@ -78,5 +78,7 @@ t_scene	*parse_scene(char *filename)
 	s->objects[2]->radius = 0.5;
 	s->objects[2]->height = 2.0;
 	s->objects[2]->color = s->objects[2]->color << 16;
+	s->selected_type = SELECT_OBJECT;
+	s->selected_index = 0;
 	return (s);
 }

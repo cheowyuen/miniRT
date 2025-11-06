@@ -20,6 +20,12 @@ typedef enum e_type{
 	CYLINDER
 } t_type;
 
+typedef enum e_selected_type{
+	SELECT_OBJECT,
+	SELECT_LIGHT,
+	SELECT_CAMERA,
+} t_selected_type;
+
 typedef struct s_camera{
 	double	position[3];
 	double	direction[3];
@@ -27,6 +33,7 @@ typedef struct s_camera{
 	double	zero_coords[3];
 	double	delta_x[3];
 	double	delta_y[3];
+	double	up[3];
 } t_camera;
 
 typedef struct s_light{
@@ -46,12 +53,14 @@ typedef struct s_object{
 } t_object;
 
 typedef struct s_scene{
-	t_camera	*camera;
-	t_light		*ambient;
-	t_light		**lights;
-	size_t		num_lights;
-	t_object	**objects;
-	size_t		num_objects;
+	t_camera		*camera;
+	t_light			*ambient;
+	t_light			**lights;
+	size_t			num_lights;
+	t_object		**objects;
+	size_t			num_objects;
+	t_selected_type	selected_type;
+	size_t			selected_index;
 } t_scene;
 
 typedef struct s_point{
@@ -82,8 +91,9 @@ void 		free_scene(t_scene *scene);
 //parsing_utils.c
 void		cross_vec(double *target, double *a, double *b);
 void		normalize(double *d);
-void		setup_geometry(t_camera *c);
+void		setup_geometry(t_camera *c, bool is_init);
 void		cal_right(double *right, double *default_up, t_camera *c);
+void		copy_vec(double *target, double *vec);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);

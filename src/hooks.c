@@ -60,11 +60,53 @@ static void	move_camera(keys_t key, t_app *window)
 	update_image(window);
 }
 
-static void	pan_camera(keys_t key, t_scene *scene)
+static void	rotate_vec(double *direction, double *axis, double angle, double *result)
 {
-	printf("The camera will pan in direction %d\n", key);
-	(void)scene;
-//	update_image(scene);
+	double	a[3];
+	double	b[3];
+	double	c[3];
+	double	d[3];
+	double	e[3];
+	double	f[3];
+
+	mult_vec(a, direction, cos(angle));
+	cross_vec(b, axis, direction);
+	mult_vec(c, b, sin(angle));
+	add_vec(d, a, c);
+	mult_vec(e, axis, dot_prod(axis, direction));
+	mult_vec(f, e, 1 - cos(angle));
+	add_vec(result, d, f);
+}
+
+static void	pan_camera(keys_t key, t_app *window)
+{
+	double 		angle;
+	double 		vec[3];
+	double 		right[3];
+	t_camera	*c;
+	
+	c = window->scene->camera;
+	angle = 0.05;
+	cross_vec(right, c->direction, c->up);
+	normalize(right);
+	if (key == MLX_KEY_I)
+		rotate_vec(c->direction, right, angle, vec);
+	else if (key == MLX_KEY_K)
+		rotate_vec(c->direction, right, -angle, vec);
+	else if (key == MLX_KEY_J)
+		rotate_vec(c->direction, c->up, angle, vec);
+	else if (key == MLX_KEY_L)
+		rotate_vec(c->direction, c->up, -angle, vec);
+	else if (key == MLX_KEY_U)
+		rotate_vec(c->up, c->direction, angle, vec);
+	else if (key == MLX_KEY_O)
+		rotate_vec(c->up, c->direction, -angle, vec);
+	if (key == MLX_KEY_U || key == MLX_KEY_O)
+		copy_vec(c->up, vec);
+	else
+		copy_vec(c->direction, vec);
+	setup_geometry(c, false);
+	update_image(window);
 }
 
 static bool	is_pan_key(keys_t key)
@@ -107,6 +149,32 @@ void	handle_resize(int32_t width, int32_t height, void* param)
 	mlx_set_window_size(window->mlx, width, height);
 }
 
+void	cycle_selection(t_scene *s)
+{
+	if (s->selected_type == SELECT_OBJECT)
+	{
+		s->selected_index++;
+		if (s->selected_index >= s->num_objects)
+		{
+			s->selected_type = SELECT_LIGHT;
+			s->selected_index = 0;
+		}
+	}
+	else if (s->selected_type == SELECT_LIGHT)
+	{
+		s->selected_index++;
+		if (s->selected_index >= s->num_lights)
+		{
+			s->selected_type = SELECT_CAMERA;
+			s->selected_index = 0;
+		}
+	}
+	else if (s->selected_type == SELECT_CAMERA)
+	{
+		s->selected_index = 0;
+		s->selected_type = SELECT_OBJECT;
+	}
+}
 
 void	handle_keys(mlx_key_data_t keydata, void *param)
 {
@@ -118,8 +186,10 @@ void	handle_keys(mlx_key_data_t keydata, void *param)
 		window->exit_code = 0;
 		ft_exit(window);
 	}
+	if (keydata.key == MLX_KEY_TAB)
+		cycle_selection(window->scene);
 	if (is_movement_key(keydata.key) && keydata.action == MLX_PRESS)
 		move_camera(keydata.key, window);
 	if (is_pan_key(keydata.key) && keydata.action == MLX_PRESS)
-		pan_camera(keydata.key, window->scene);
+		pan_camera(keydata.key, window);
 }

@@ -1,5 +1,12 @@
 #include "minirt.h"
 
+void	copy_vec(double *target, double *vec)
+{
+	target[0] = vec[0];
+	target[1] = vec[1];
+	target[2] = vec[2];
+}
+
 void	cross_vec(double *target, double *a, double *b)
 {
 	target[0] = a[1] * b[2] - a[2] * b[1];
@@ -32,20 +39,25 @@ void	cal_right(double *right, double *default_up, t_camera *c)
 	normalize(right);
 }
 
-void	setup_geometry(t_camera *c)
+void	setup_geometry(t_camera *c, bool is_init)
 {
 	double		default_up[3];
 	double		right[3];
-	double		up[3];
 	double		vw;
 	double		vh;
 	double		fov_rad;
 	int			i;
 
 	normalize(c->direction);
-	cal_right(right, default_up, c);
-	cross_vec(up, right, c->direction);
-	normalize(up);
+	if (is_init)
+		cal_right(right, default_up, c);
+	else
+	{
+		cross_vec(right, c->direction, c->up);
+		normalize(right);
+	}
+	cross_vec(c->up, right, c->direction);
+	normalize(c->up);
 	fov_rad = c->fov * M_PI / 180.0;
 	vw = 2.0 * tan(fov_rad / 2);
 	vh = vw / ((double)WIDTH / HEIGHT);
@@ -53,7 +65,7 @@ void	setup_geometry(t_camera *c)
 	while (i < 3)
 	{
 		c->delta_x[i] = right[i] * vw / WIDTH;
-		c->delta_y[i] = -up[i] * vh / HEIGHT;
+		c->delta_y[i] = -c->up[i] * vh / HEIGHT;
 		c->zero_coords[i] = c->position[i] + c->direction[i]
 			- c->delta_x[i] * (WIDTH / 2.0)
 			- c->delta_y[i] * (HEIGHT / 2.0);

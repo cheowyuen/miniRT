@@ -52,16 +52,10 @@ static void resize_obj(keys_t key, t_app *window)
 
 static void	cal_move(double *move, double *direction, double step)
 {
-	// double	scaled[3];
+	double	scaled[3];
 
-	// mult_vec(scaled, direction, step);
-	// printf("scaled: %f, %f, %f\n", scaled[0], scaled[1], scaled[2]);
-	// add_vec(move, move, scaled);
-	// printf("move after add_vec: %f, %f, %f\n", move[0], move[1], move[2]);
-
-	move[0] += direction[0] * step;
-    move[1] += direction[1] * step;
-    move[2] += direction[2] * step;
+	mult_vec(scaled, direction, step);
+	add_vec(move, move, scaled);
 }
 
 static void	move_camera(keys_t key, t_app *window)

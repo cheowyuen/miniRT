@@ -47,6 +47,7 @@ t_object	*make_object(char *str)
 	object->radius = 1.0;
 	object->height = 5.0;
 	object->color = (225 << 8 | 0);
+	setup_geometry_obj(object, true);
 	return (object);
 }
 

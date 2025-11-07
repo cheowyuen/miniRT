@@ -45,14 +45,11 @@ static void	move_camera(keys_t key, t_app *window)
 	double 		right[3];
 	double 		default_up[3];
 	t_scene		*s;
-	// double		up[3];
-
+	
 	s = window->scene;
 	step = 0.1;
 	ft_bzero(move, sizeof(move));
-	cal_right(right, default_up, s->camera);
-	printf("up:%f, %f, %f\n", default_up[0], default_up[1], default_up[2]);
-	printf("dir: %f, %f, %f\n", s->camera->direction[0], s->camera->direction[1], s->camera->direction[2]);
+	cal_right(right, default_up, s->camera->direction);
 	if (key == MLX_KEY_Q)
 		cal_move(move,  default_up, step);
 	else if (key == MLX_KEY_E)
@@ -62,16 +59,11 @@ static void	move_camera(keys_t key, t_app *window)
 	else if (key == MLX_KEY_D)
 		cal_move(move, right, step);
 	else if (key == MLX_KEY_W)
-		cal_move(move,  s->camera->direction, step);
+		cal_move(move,  s->camera->direction, step); 
 	else if (key == MLX_KEY_S)
 		cal_move(move,  s->camera->direction, -step);
-	printf("move:%f, %f, %f\n", move[0], move[1], move[2]);
 	if (s->selected_type == SELECT_OBJECT)
-	{
-		printf("pos ori:%f, %f, %f\n", s->objects[s->selected_index]->position[0], s->objects[s->selected_index]->position[1], s->objects[s->selected_index]->position[2]);
 		add_vec(s->objects[s->selected_index]->position, s->objects[s->selected_index]->position, move);
-		printf("pos:%f, %f, %f\n", s->objects[s->selected_index]->position[0], s->objects[s->selected_index]->position[1], s->objects[s->selected_index]->position[2]);
-	}
 	else if (s->selected_type == SELECT_LIGHT)
 		add_vec(s->lights[s->selected_index]->position, s->lights[s->selected_index]->position, move);
 	else if (s->selected_type == SELECT_CAMERA)
@@ -102,29 +94,56 @@ static void	pan_camera(keys_t key, t_app *window)
 	double 		angle;
 	double 		vec[3];
 	double 		right[3];
-	t_camera	*c;
+	t_scene		*s;
+	double		direction[3];
+	double		up[3];
+	t_object	*obj;
 
-	c = window->scene->camera;
+	s = window->scene;
+	obj = s->objects[s->selected_index];
+	if (s->selected_type == SELECT_OBJECT &&  obj->type != SPHERE)
+	{
+		copy_vec(direction, obj->orientation);
+		copy_vec(up, obj->up);
+	}
+	else if (s->selected_type == SELECT_CAMERA)
+	{
+		copy_vec(direction, s->camera->direction);
+		copy_vec(up, s->camera->up);
+	}
+	else
+		return ;
 	angle = 0.05;
-	cross_vec(right, c->direction, c->up);
+	cross_vec(right, direction, up);
 	normalize(right);
 	if (key == MLX_KEY_I)
-		rotate_vec(c->direction, right, angle, vec);
+		rotate_vec(direction, up, -angle, vec);
 	else if (key == MLX_KEY_K)
-		rotate_vec(c->direction, right, -angle, vec);
+		rotate_vec(direction, up, angle, vec);
 	else if (key == MLX_KEY_J)
-		rotate_vec(c->direction, c->up, angle, vec);
+		rotate_vec(direction, right, -angle, vec);
 	else if (key == MLX_KEY_L)
-		rotate_vec(c->direction, c->up, -angle, vec);
+		rotate_vec(direction, right, angle, vec);
 	else if (key == MLX_KEY_U)
-		rotate_vec(c->up, c->direction, angle, vec);
+		rotate_vec(up, direction, angle, vec);
 	else if (key == MLX_KEY_O)
-		rotate_vec(c->up, c->direction, -angle, vec);
-	if (key == MLX_KEY_U || key == MLX_KEY_O)
-		copy_vec(c->up, vec);
-	else
-		copy_vec(c->direction, vec);
-	setup_geometry(c, false);
+		rotate_vec(up, direction, -angle, vec);
+	if (s->selected_type == SELECT_OBJECT && obj->type != SPHERE)
+	{
+		if (key == MLX_KEY_U || key == MLX_KEY_O)
+			copy_vec(obj->up, vec);
+		else
+			copy_vec(obj->orientation, vec);
+		setup_geometry_obj(obj, false);
+	}
+	else if (s->selected_type == SELECT_CAMERA)
+	{
+		if (key == MLX_KEY_U || key == MLX_KEY_O)
+			copy_vec(s->camera->up, vec);
+		else
+			copy_vec(s->camera->direction, vec);
+		setup_geometry(s->camera, false);
+	}
 	update_image(window);
 }
 
@@ -184,7 +203,6 @@ void	cycle_selection(t_scene *s)
 		s->selected_index++;
 		if (s->selected_index >= s->num_lights)
 		{
-			printf("camera\n");
 			s->selected_type = SELECT_CAMERA;
 			s->selected_index = 0;
 		}
@@ -199,14 +217,14 @@ void	cycle_selection(t_scene *s)
 void	handle_keys(mlx_key_data_t keydata, void *param)
 {
 	t_app	*window;
-
+	
 	window = (t_app *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
 		window->exit_code = 0;
 		ft_exit(window);
 	}
-	if (keydata.key == MLX_KEY_TAB)
+	if (keydata.key == MLX_KEY_TAB && keydata.action == MLX_PRESS)
 		cycle_selection(window->scene);
 	if (is_movement_key(keydata.key) && keydata.action == MLX_PRESS)
 		move_camera(keydata.key, window);

@@ -24,18 +24,18 @@ void normalize(double *d)
 	d[2] /= length;
 }
 
-void	cal_right(double *right, double *default_up, t_camera *c)
+void	cal_right(double *right, double *default_up, double *direction)
 {
 	default_up[0] = 0.0;
 	default_up[1] = 1.0;
 	default_up[2] = 0.0;
-	if (fabs(dot_prod(c->direction, default_up)) > 0.999)
+	if (fabs(dot_prod(direction, default_up)) > 0.999)
 	{
 		default_up[0] = 1.0;
 		default_up[1] = 0.0;
 		default_up[2] = 0.0;
 	}
-	cross_vec(right, c->direction, default_up);
+	cross_vec(right, direction, default_up);
 	normalize(right);
 }
 
@@ -50,7 +50,7 @@ void	setup_geometry(t_camera *c, bool is_init)
 
 	normalize(c->direction);
 	if (is_init)
-		cal_right(right, default_up, c);
+		cal_right(right, default_up, c->direction);
 	else
 	{
 		cross_vec(right, c->direction, c->up);
@@ -71,4 +71,21 @@ void	setup_geometry(t_camera *c, bool is_init)
 			- c->delta_y[i] * (HEIGHT / 2.0);
 		i++;
 	}
+}
+
+void	setup_geometry_obj(t_object *obj, bool is_init)
+{
+	double		default_up[3];
+	double		right[3];
+
+	normalize(obj->orientation);
+	if (is_init)
+		cal_right(right, default_up, obj->orientation);
+	else
+	{
+		cross_vec(right, obj->orientation, obj->up);
+		normalize(right);
+	}
+	cross_vec(obj->up, right,  obj->orientation);
+	normalize(obj->up);
 }

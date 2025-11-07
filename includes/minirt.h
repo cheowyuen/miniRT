@@ -44,12 +44,13 @@ typedef struct s_light{
 } t_light;
 
 typedef struct s_object{
-	t_type type;
-	double position[3];
-	double orientation[3];
-	double radius;
-	double height;
+	t_type 	type;
+	double 	position[3];
+	double 	orientation[3];
+	double 	radius;
+	double 	height;
 	int32_t color;
+	double	up[3];
 } t_object;
 
 typedef struct s_scene{
@@ -92,8 +93,9 @@ void 		free_scene(t_scene *scene);
 void		cross_vec(double *target, double *a, double *b);
 void		normalize(double *d);
 void		setup_geometry(t_camera *c, bool is_init);
-void		cal_right(double *right, double *default_up, t_camera *c);
+void		cal_right(double *right, double *default_up, double *direction);
 void		copy_vec(double *target, double *vec);
+void		setup_geometry_obj(t_object *obj, bool is_init);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);

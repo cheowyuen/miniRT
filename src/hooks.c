@@ -24,6 +24,32 @@ void	update_image(t_app *window)
 	window->current = new;
 }
 
+static void resize_obj(keys_t key, t_app *window)
+{
+	t_scene		*s;
+	t_object	*obj;
+	double		step;
+
+	s = window->scene;
+	obj = s->objects[s->selected_index];
+	step = 0.1;
+	if (key == MLX_KEY_UP)
+	{
+		if (obj->type == SPHERE)
+			obj->radius += step;
+		else
+			obj->height += step;
+	}
+	else if (key == MLX_KEY_DOWN)
+	{
+		if (obj->type == SPHERE && obj->radius > step)
+			obj->radius -= step;
+		else if (obj->type == CYLINDER && obj->height > step)
+			obj->height -= step;
+	}
+	update_image(window);
+}
+
 static void	cal_move(double *move, double *direction, double step)
 {
 	// double	scaled[3];
@@ -230,4 +256,6 @@ void	handle_keys(mlx_key_data_t keydata, void *param)
 		move_camera(keydata.key, window);
 	if (is_pan_key(keydata.key) && keydata.action == MLX_PRESS)
 		pan_camera(keydata.key, window);
+	if ((keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN) && keydata.action == MLX_PRESS)
+		resize_obj(keydata.key, window);
 }

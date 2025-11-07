@@ -45,12 +45,14 @@ bool	hit_disk(double *center, t_ray ray, t_object *cylinder, double *t)
 bool	hit_caps(t_ray ray, t_object *cylinder, double *t)
 {
 	double	cap_center[3];
+	double	disk[3];
 	
-	if (hit_disk(cylinder->position, ray, cylinder, t))
+	mult_vec(cap_center, cylinder->orientation, cylinder->height / 2);
+	sub_vec(disk, cylinder->position, cap_center);
+	if (hit_disk(disk, ray, cylinder, t))
 		return (true);
-	mult_vec(cap_center, cylinder->orientation, cylinder->height);
-	add_vec(cap_center, cap_center, cylinder->position);
-	if (hit_disk(cap_center, ray, cylinder, t))
+	add_vec(disk, cap_center, cylinder->position);
+	if (hit_disk(disk, ray, cylinder, t))
 		return (true);
 	return (false);
 }

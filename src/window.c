@@ -18,6 +18,8 @@ void	free_window(t_app *window)
 void	make_window(t_scene *scene, t_app *window)
 {
 	window->scene = scene;
+	window->width = WIDTH;
+	window->height = HEIGHT;
 	window->mlx = mlx_init(HEIGHT, WIDTH, "miniRT", true);
 	if (window->mlx)
 		window->current = mlx_new_image(window->mlx, HEIGHT, WIDTH);

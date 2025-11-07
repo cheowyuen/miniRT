@@ -75,6 +75,8 @@ typedef struct s_app{
 	mlx_image_t	*current;
 	t_scene		*scene;
 	int			exit_code;
+	int32_t		width;
+	int32_t		height;
 } t_app;
 
 typedef struct s_ray{
@@ -92,7 +94,7 @@ void 		free_scene(t_scene *scene);
 //parsing_utils.c
 void		cross_vec(double *target, double *a, double *b);
 void		normalize(double *d);
-void		setup_geometry(t_camera *c, bool is_init);
+void		setup_geometry(t_camera *c, bool is_init, int32_t width, int32_t height);
 void		cal_right(double *right, double *default_up, double *direction);
 void		copy_vec(double *target, double *vec);
 void		setup_geometry_obj(t_object *obj, bool is_init);

@@ -39,7 +39,7 @@ void	cal_right(double *right, double *default_up, double *direction)
 	normalize(right);
 }
 
-void	setup_geometry(t_camera *c, bool is_init)
+void	setup_geometry(t_camera *c, bool is_init, int32_t width, int32_t height)
 {
 	double		default_up[3];
 	double		right[3];
@@ -60,15 +60,15 @@ void	setup_geometry(t_camera *c, bool is_init)
 	normalize(c->up);
 	fov_rad = c->fov * M_PI / 180.0;
 	vw = 2.0 * tan(fov_rad / 2);
-	vh = vw / ((double)WIDTH / HEIGHT);
+	vh = vw / ((double)width / height);
 	i = 0;
 	while (i < 3)
 	{
-		c->delta_x[i] = right[i] * vw / WIDTH;
-		c->delta_y[i] = -c->up[i] * vh / HEIGHT;
+		c->delta_x[i] = right[i] * vw / width;
+		c->delta_y[i] = -c->up[i] * vh / height;
 		c->zero_coords[i] = c->position[i] + c->direction[i]
-			- c->delta_x[i] * (WIDTH / 2.0)
-			- c->delta_y[i] * (HEIGHT / 2.0);
+			- c->delta_x[i] * (width / 2.0)
+			- c->delta_y[i] * (height / 2.0);
 		i++;
 	}
 }

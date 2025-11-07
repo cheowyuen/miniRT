@@ -7,10 +7,10 @@ void	update_image(t_app *window)
 	mlx_image_t	*new;
 
 	ft_memset(xy, 0, sizeof(uint32_t) * 2);
-	new = mlx_new_image(window->mlx, WIDTH, HEIGHT);
-	while (xy[0] < WIDTH)
+	new = mlx_new_image(window->mlx, (uint32_t)window->width, (uint32_t)window->height);
+	while (xy[0] < (uint32_t)window->width)
 	{
-		while (xy[1] < HEIGHT)
+		while (xy[1] < (uint32_t)window->height)
 		{
 			color = color_of_pixel(window->scene, xy[0], xy[1]);
 			mlx_put_pixel(new, xy[0], xy[1], color);
@@ -162,7 +162,7 @@ static void	pan_camera(keys_t key, t_app *window)
 			copy_vec(s->camera->up, vec);
 		else
 			copy_vec(s->camera->direction, vec);
-		setup_geometry(s->camera, false);
+		setup_geometry(s->camera, false, window->width, window->height);
 	}
 	update_image(window);
 }
@@ -204,7 +204,10 @@ void	handle_resize(int32_t width, int32_t height, void* param)
 //	recalculate viewport to match new size of screen, keeping top left pixel constant?
 //	or keep rendering everything, but only showing the new selection if smaller?
 	window = (t_app *)param;
-	mlx_set_window_size(window->mlx, width, height);
+	window->width = width;
+	window->height = height;
+	setup_geometry(window->scene->camera, false, width, height);
+	update_image(window);
 }
 
 void	cycle_selection(t_scene *s)

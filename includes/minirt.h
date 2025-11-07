@@ -25,6 +25,12 @@ typedef enum e_type{
 	CYLINDER
 } t_type;
 
+typedef enum e_selected_type{
+	SELECT_OBJECT,
+	SELECT_LIGHT,
+	SELECT_CAMERA,
+} t_selected_type;
+
 typedef struct s_camera{
 	double	position[3];
 	double	direction[3];
@@ -32,6 +38,7 @@ typedef struct s_camera{
 	double	zero_coords[3];
 	double	delta_x[3];
 	double	delta_y[3];
+	double	up[3];
 } t_camera;
 
 typedef struct s_light{
@@ -42,22 +49,25 @@ typedef struct s_light{
 } t_light;
 
 typedef struct s_object{
-	t_type type;
-	double position[3];
-	double orientation[3];
-	double radius;
-	double height;
+	t_type 	type;
+	double 	position[3];
+	double 	orientation[3];
+	double 	radius;
+	double 	height;
 	int32_t color;
+	double	up[3];
 } t_object;
 
 typedef struct s_scene{
-	t_camera	*camera;
-	t_light		*ambient;
-	t_light		*light;
-	t_object	**objects;
-	size_t		num_objects;
-	char		*line;
-	int			fd;
+	t_camera		*camera;
+	t_light			*ambient;
+	t_light			*light;
+	t_object		**objects;
+	size_t			num_objects;
+	char			*line;
+	int				fd;
+	t_selected_type	selected_type;
+	size_t			selected_index;
 } t_scene;
 
 typedef struct s_point{
@@ -71,6 +81,8 @@ typedef struct s_app{
 	mlx_image_t	*current;
 	t_scene		*scene;
 	int			exit_code;
+	int32_t		width;
+	int32_t		height;
 } t_app;
 
 typedef struct s_ray{
@@ -99,7 +111,10 @@ ssize_t		parse_triplet(double *target, char *str);
 //parsing_utils.c
 void		cross_vec(double *target, double *a, double *b);
 void		normalize(double *d);
-void		setup_geometry(t_camera *c);
+void		setup_geometry(t_camera *c, bool is_init, int32_t width, int32_t height);
+void		cal_right(double *right, double *default_up, double *direction);
+void		copy_vec(double *target, double *vec);
+void		setup_geometry_obj(t_object *obj, bool is_init);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);

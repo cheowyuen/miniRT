@@ -68,7 +68,7 @@ t_camera	*make_camera(char *str, t_scene *scene)
 	while (str[i] == ' ')
 		++i;
 	camera->fov = ft_atoi(str + i); 
-	setup_geometry(camera);
+	setup_geometry(camera, true, WIDTH, HEIGHT);
 	return (camera);
 }
 
@@ -198,6 +198,7 @@ void	make_object(char *str, t_scene *scene)
 	array[i] = object;
 	free(scene->objects);
 	scene->objects = array;
+	setup_geometry_obj(object, true);
 }
 
 void	check_and_add_line(char *line, t_scene *s)
@@ -267,5 +268,7 @@ t_scene	*parse_scene(char *filename)
 		s->line = get_next_line(s->fd);
 	}
 	check_requirements(s);
+	s->selected_type = SELECT_OBJECT;
+	s->selected_index = 0;
 	return (s);
 }

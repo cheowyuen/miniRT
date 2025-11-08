@@ -177,6 +177,7 @@ void	make_object(char *str, t_scene *scene)
 	t_object	*object;
 	t_object	**array;
 	int			i;
+	double		right[3];
 
 	object = ft_calloc(1, sizeof(t_object));
 	if (!object)
@@ -198,7 +199,7 @@ void	make_object(char *str, t_scene *scene)
 	array[i] = object;
 	free(scene->objects);
 	scene->objects = array;
-	setup_geometry_obj(object, true);
+	cal_vec(object->orientation, object->up, right, true);
 }
 
 void	check_and_add_line(char *line, t_scene *s)

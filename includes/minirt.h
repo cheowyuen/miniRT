@@ -18,6 +18,7 @@
 #define	QUAD 0.001f
 #define HEIGHT 1000
 #define WIDTH 1000
+#define ROTATION_ANGLE 0.05
 
 typedef enum e_type{
 	SPHERE,
@@ -90,6 +91,18 @@ typedef struct s_ray{
 	double	direction[3];
 } t_ray;
 
+typedef struct s_hit{
+	t_object	*obj;
+	double		t;
+} t_hit;
+
+typedef struct s_vec{
+	double	oc[3];
+	double	hit[3];
+	double	vec[3];
+	double	perp[3];
+} t_vec;
+
 //parsing.c
 t_scene		*parse_scene(char *filename);
 void		check_requirements(t_scene *scene);
@@ -107,14 +120,10 @@ double 		ft_atod(char *line, int *read, char delimiter);
 ssize_t		parse_color(int32_t *color, char *str);
 ssize_t		parse_triplet(double *target, char *str);
 
-
 //parsing_utils.c
-void		cross_vec(double *target, double *a, double *b);
-void		normalize(double *d);
 void		setup_geometry(t_camera *c, bool is_init, int32_t width, int32_t height);
 void		cal_right(double *right, double *default_up, double *direction);
-void		copy_vec(double *target, double *vec);
-void		setup_geometry_obj(t_object *obj, bool is_init);
+void		cal_vec(double *direction, double *up, double *right, bool is_init);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);
@@ -122,6 +131,11 @@ void		sub_vec(double *target, double *a, double *b);
 double		dot_prod(double *a, double *b);
 void		mult_vec(double *target, double *vec, double scale);
 double	 	abs_vec(double *vec);
+
+//vector_utils.c
+void		cross_vec(double *target, double *a, double *b);
+void		normalize(double *d);
+void		copy_vec(double *target, double *vec);
 
 //normal_vectors.c
 void		make_normal_vector(t_point *p);
@@ -141,15 +155,30 @@ void		make_window(t_scene *scene, t_app *window);
 //hooks.c
 void		update_image(t_app *window);
 void 		handle_keys(mlx_key_data_t keydata, void *param);
-void		handle_resize(int32_t width, int32_t height, void* param);
 
 //ray.c
 int32_t		color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy);
-void		normalize(double *d);
-bool		hit_caps(t_ray ray, t_object *cylinder, double *t);
 bool		hit_object(double *dir, double *oc, double r, double *t);
-bool		hit_cylinder(t_ray ray, t_object *cylinder, double *t);
 bool		hit_plane(t_ray ray, t_object *plane, double *t);
+
+//ray_utils.c
+void		make_point(t_point *p, double *position, t_object *object);
 t_ray		make_ray(double *origin, double pixel_pos[3]);
+void		hit_points(double *hit, double *origin, double *direction, double t);
+void		proj_perpendicular(double *vec, double *axis, double *result);
+void 		add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy);
+
+//cylinder.c
+bool		hit_cylinder(t_ray ray, t_object *cylinder, double *t);
+bool		hit_caps(t_ray ray, t_object *cylinder, double *t);
+bool		cal_t(double a, double b, double discriminant, double *t);
+
+//translation.c
+void		move_camera(keys_t key, t_app *window);
+void 		resize_obj(keys_t key, t_app *window);
+void		handle_resize(int32_t width, int32_t height, void* param);
+
+//rotation.c
+void		pan_camera(keys_t key, t_app *window);
 
 #endif

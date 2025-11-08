@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:25:08 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/08 11:47:57 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/08 21:48:10 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	cal_vec(double *direction, double *up, double *right, bool is_init)
 {
 	double		default_up[3];
 
-	normalize(direction);
+	// normalize(direction);
 	if (is_init)
 		cal_right(right, default_up, direction);
 	else

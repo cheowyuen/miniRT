@@ -113,6 +113,8 @@ double get_light_intensity(t_point *p, t_scene *s)
 		normalize(light_to_point);
 		attenuation = 1.0 / (1.0 + LINEAR * dist + QUAD * dist * dist);
 		total = dot_prod(normal, light_to_point) * attenuation;
+		if (total < 0)
+            total = 0;
 	}
 	return (total);
 }

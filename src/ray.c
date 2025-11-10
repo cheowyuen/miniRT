@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:50:17 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/08 17:56:39 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/10 12:03:12 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,12 @@ bool	hit_plane(t_ray ray, t_object *plane, double *t)
 
 static bool	object_intersect(t_scene *scene, int i, t_ray ray, double *t)
 {
-	double		oc[3];
+	double	oc[3];
+	double	temp[2];
+	bool	hit;
 
+	temp[0] = INFINITY;
+	temp[1] = INFINITY;
 	if (scene->objects[i]->type == SPHERE)
 	{
 		sub_vec(oc, ray.origin, scene->objects[i]->position);
@@ -58,10 +62,12 @@ static bool	object_intersect(t_scene *scene, int i, t_ray ray, double *t)
 		return (hit_plane(ray, scene->objects[i], t));
 	else if (scene->objects[i]->type == CYLINDER)
 	{
-		if (hit_cylinder(ray, scene->objects[i], t))
+		hit = hit_cylinder(ray, scene->objects[i], &temp[0]);
+		if (hit_caps(ray, scene->objects[i], &temp[1]) || hit)
+		{
+			*t = fmin(temp[0], temp[1]);
 			return (true);
-		else if (hit_caps(ray, scene->objects[i], t))
-			return (true);
+		}
 	}
 	return (false);
 }

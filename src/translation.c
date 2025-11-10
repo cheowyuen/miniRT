@@ -6,12 +6,15 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:55:43 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/08 11:16:10 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/10 11:05:35 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+
+//add safety checks: radius and height should remain > 0
+//maybe change to percent change, so a multiplier instead of addition
 void	resize_obj(keys_t key, t_app *window)
 {
 	t_scene		*s;

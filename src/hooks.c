@@ -59,16 +59,25 @@ static void	cycle_selection(t_scene *s)
 	if (s->selected_type == SELECT_OBJECT)
 	{
 		s->selected_index++;
+		if (s->selected_index < s->num_objects)
+			printf("selected object\n");
 		if (s->selected_index >= s->num_objects)
 		{
 			s->selected_type = SELECT_LIGHT;
 			s->selected_index = 0;
+			printf("selected light\n");
 		}
 	}
 	else if (s->selected_type == SELECT_LIGHT)
+	{
 		s->selected_type = SELECT_CAMERA;
+		printf("selected camera\n");
+	}
 	else if (s->selected_type == SELECT_CAMERA)
+	{
 		s->selected_type = SELECT_OBJECT;
+		printf("selected object\n");
+	}
 }
 
 void	handle_keys(mlx_key_data_t keydata, void *param)

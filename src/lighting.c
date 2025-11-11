@@ -63,7 +63,7 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 
 	if (p->object->type == PLANE && !check_side_of_plane(p, l, s->camera))
 		return (false);
-	mult_vec(temp, p->normal, 0.001f); //move the offsetting to the point calculation for efficency?
+	mult_vec(temp, p->normal, 0.01f); //move the offsetting to the point calculation for efficency?
 	add_vec(offset_point, p->point, temp);
 	sub_vec(temp, l->position, offset_point);
 	distance = abs_vec(temp);
@@ -71,7 +71,7 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 	i = 0;
 	while (i < s->num_objects)
 	{
-		if (s->objects[i] != p->object && min_distance(&ray, s->objects[i]) < distance)
+		if (min_distance(&ray, s->objects[i]) < distance)
 			return (false);
 		++i;
 	}
@@ -112,6 +112,7 @@ double get_light_intensity(t_point *p, t_scene *s)
 		dist = abs_vec(light_to_point);
 		normalize(light_to_point);
 		attenuation = 1.0 / (1.0 + LINEAR * dist + QUAD * dist * dist);
+//		attenuation = 1.0;
 		total = dot_prod(normal, light_to_point) * attenuation;
 		if (total < 0)
             total = 0;

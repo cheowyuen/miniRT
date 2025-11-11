@@ -13,7 +13,7 @@
 #include <string.h>
 #include "libft.h"
 
-#define EPSILON 1e-9
+#define EPSILON 1e-3
 #define	LINEAR 0.01f
 #define	QUAD 0.001f
 #define HEIGHT 1000

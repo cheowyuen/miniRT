@@ -9,7 +9,7 @@ static void	cylinder_normal(t_point *p)
 
 	sub_vec(center_to_point, p->point, p->object->position);
 	length = dot_prod(center_to_point, p->object->orientation); //assumes orientation is a unit vector, so no need to divide by o.o
-	if (fabs(fabs(length) - (p->object->height / 2)) < EPSILON) //on one of the ends
+	if (fabs(fabs(length) - (p->object->height / 2)) < 0.001f) //on one of the ends
 		mult_vec(p->normal, p->object->orientation, copysign(1.0, length)); //copysign returns the magnitude of first arg with sign of second, so this multiplies by 1.0 or -1.0
 	else
 	{

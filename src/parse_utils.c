@@ -52,6 +52,11 @@ double ft_atod(char *line, int *read, char delimiter)
 	int		sign;
 	ssize_t	i;
 
+	while (*line == ' ')
+	{
+		line++;
+		(*read)++;
+	}
 	value = 0.0;
 	sign = 1;
 	if (*(line++) == '-')
@@ -78,6 +83,8 @@ ssize_t	parse_color(int32_t *color, char *str)
 	int		temp;
 	ssize_t	i;
 
+	while (*str == ' ')
+		str++;
 	channel = 0;
 	i = 0;
 	while (channel < 3)
@@ -93,9 +100,18 @@ ssize_t	parse_color(int32_t *color, char *str)
 			return (-1);
 		else
 			++i;
+		// allow trailing spaces at end of line
+		// if (i == 0 || (channel < 2 && str[i] != ',') || temp > 255)
+		// 	return (-1);
+		// if (channel < 2)
+		// 	++i;
 		*color = (*color << 8) | temp;
 		++channel;
 	}
+	// while (str[i] == ' ')
+	// 	++i;
+	// if (str[i] != '\0')
+	// 	return (-1);
 	*color = (*color << 8);
 	return (i);
 }
@@ -109,6 +125,11 @@ ssize_t	parse_triplet(double *target, char *str)
 
 	index = 0;
 	count = 0;
+	while (*str == ' ')
+	{
+		str++;
+		count++;
+	}
 	while (index < 2)
 	{
 		read = 0;

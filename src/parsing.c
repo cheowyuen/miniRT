@@ -68,6 +68,8 @@ t_camera	*make_camera(char *str, t_scene *scene)
 	while (str[i] == ' ')
 		++i;
 	camera->fov = ft_atoi(str + i); 
+	if (camera->fov < 0 || camera->fov > 180)
+		parse_error("error parsing fov on line: ", str, scene, camera);
 	setup_geometry(camera, true, WIDTH, HEIGHT);
 	return (camera);
 }
@@ -128,14 +130,12 @@ void	parse_sphere(char *str, t_object *object, t_scene *scene)
 	int		i;
 
 	i = 1;
-	while (str[i] == ' ')
-		++i;
 	temp = parse_triplet(object->position, str + i);
 	if (temp == -1)
 		parse_error("error parsing position on line: ", str, scene, object);
 	i += temp;
 	object->radius = ft_atod(str + i, &i, ' ');
-	if (i == -1)
+	if (i == -1 || object->radius <= 0)
 		parse_error("error parsing radius on line: ", str, scene, object);
 	temp = parse_color(&object->color, str + i);
 	if (temp == -1)
@@ -149,8 +149,6 @@ void	parse_cylinder(char *str, t_object *object, t_scene *scene)
 	int		i;
 
 	i = 1;
-	while (str[i] == ' ')
-		++i;
 	temp = parse_triplet(object->position, str + i);
 	if (temp == -1)
 		parse_error("error parsing position on line: ", str, scene, object);
@@ -160,11 +158,11 @@ void	parse_cylinder(char *str, t_object *object, t_scene *scene)
 		parse_error("error parsing direction on line: ", str, scene, object);
 	i += temp;
 	object->radius = ft_atod(str + i, &i, ' ');
-	if (i == -1)
+	if (i == -1 || object->radius <= 0)
 		parse_error("error parsing radius on line: ", str, scene, object);
 	object->height = ft_atod(str + i, &i, ' ');
-	if (i == -1)
-		parse_error("error parsing radius on line: ", str, scene, object);
+	if (i == -1 || object->height <= 0)
+		parse_error("error parsing height on line: ", str, scene, object);
 	temp = parse_color(&object->color, str + i);
 	if (temp == -1)
 		parse_error("error parsing color on line: ", str, scene, object);

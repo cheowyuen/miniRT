@@ -28,6 +28,30 @@ void	check_pending_resize(void *param)
 	}
 }
 
+void	print_selected_element(t_scene *s)
+{
+	const char	*o_strs[3] = {"sphere", "plane", "cylinder"};
+	const char	*format = "Selected %s at %f,%f,%f\n";
+	double		*temp;
+
+	if (s->selected_type == SELECT_OBJECT)
+	{
+		temp = s->objects[s->selected_index]->position;
+		printf(format, o_strs[s->objects[s->selected_index]->type], temp[0],\
+temp[1], temp[2]);
+	}
+	else if (s->selected_type == SELECT_LIGHT)
+	{
+		temp = s->light->position;
+		printf(format, "light", temp[0], temp[1], temp[2]);
+	}
+	else if (s->selected_type == SELECT_CAMERA)
+	{
+		temp = s->light->position;
+		printf(format, "camera", temp[0], temp[1], temp[2]);
+	}
+}
+
 void	make_window(t_scene *scene, t_app *window)
 {
 	window->scene = scene;

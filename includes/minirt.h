@@ -154,6 +154,7 @@ void 		free_scene(t_scene *scene);
 //window.c
 void		free_window(t_app *window);
 void		make_window(t_scene *scene, t_app *window);
+void		print_selected_element(t_scene *s);
 
 //hooks.c
 void		update_image(t_app *window);

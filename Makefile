@@ -6,13 +6,14 @@
 #    By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:01:30 by cwong             #+#    #+#              #
-#    Updated: 2025/11/04 11:44:28 by nraatika         ###   ########.fr        #
+#    Updated: 2025/11/13 15:30:28 by nraatika         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		:= cc
 
-CFLAGS	:= -Wall -Wextra -Werror -g
+CFLAGS	:= -Wall -Wextra -Werror -O3 -march=native
+DEBUG	:= -g
 
 NAME	:= miniRT
 
@@ -70,5 +71,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+debug: CFLAGS += $(DEBUG)
+debug: $(NAME)
 
 .PHONY: all clean fclean re

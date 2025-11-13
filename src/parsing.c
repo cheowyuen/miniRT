@@ -253,7 +253,7 @@ t_scene	*parse_scene(char *filename)
 		return (NULL);
 	ft_memset(s, 0, sizeof(t_scene));
 	if (ft_strncmp((filename + ft_strlen(filename) - 3), ".rt", 3))
-		parse_error("Invalid filename: ", filename, s, NULL);
+		parse_error("Invalid file extension: ", filename, s, NULL);
 	s->fd = open(filename, O_RDONLY);
 	if (s->fd == -1)
 		parse_error("Error opening file: ", filename, s, NULL);

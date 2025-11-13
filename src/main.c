@@ -31,6 +31,7 @@ static void run_scene(t_scene *scene)
 
 	make_window(scene, &window);
 	update_image(&window);
+	print_selected_element(window.scene);
 	mlx_loop(window.mlx);
 	window.exit_code = 0;
 	ft_exit(&window);

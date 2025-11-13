@@ -80,19 +80,14 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 
 int32_t	get_color(t_point *p, t_scene *s)
 {
-	int		light_mask;
-	double	ambient;
-	double	light;
+	double	ambient[3];
+	double	light[3];
 
-//	return (p->object->color | 255);
-	ambient = s->ambient->intensity;
-	light = get_light_intensity(p, s);
-	light_mask = (ambient + light) * 255; //scale according to number of lights?
-	if (light_mask < 0)
-		light_mask = 0;
-	if (light_mask > 255)
-		light_mask = 255;
-	return (p->object->color | light_mask);
+	blend_colors(ambient, p->object->color, s->ambient->color);
+	mult_vec(ambient, ambient, s->ambient->intensity);
+	blend_colors(light, p->object->color, s->light->color);
+	mult_vec(light, light, get_light_intensity(p, s));
+	return (add_colors(ambient, light));
 }
 
 double get_light_intensity(t_point *p, t_scene *s)
@@ -112,8 +107,8 @@ double get_light_intensity(t_point *p, t_scene *s)
 		dist = abs_vec(light_to_point);
 		normalize(light_to_point);
 		attenuation = 1.0 / (1.0 + LINEAR * dist + QUAD * dist * dist);
-//		attenuation = 1.0;
 		total = dot_prod(normal, light_to_point) * attenuation;
+		total *= s->light->intensity;
 		if (total < 0)
             total = 0;
 	}

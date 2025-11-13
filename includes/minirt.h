@@ -19,6 +19,7 @@
 #define HEIGHT 1000
 #define WIDTH 1000
 #define ROTATION_ANGLE 0.05
+#define REDRAW_INTERVAL 3.0
 
 typedef enum e_type{
 	SPHERE,
@@ -84,6 +85,8 @@ typedef struct s_app{
 	int			exit_code;
 	int32_t		width;
 	int32_t		height;
+	double		last_render_time;
+	bool		resize_pending;
 } t_app;
 
 typedef struct s_ray{
@@ -180,5 +183,9 @@ void		handle_resize(int32_t width, int32_t height, void* param);
 
 //rotation.c
 void		pan_camera(keys_t key, t_app *window);
+
+//colors.c
+void 		blend_colors(double *target, int32_t a, int32_t b);
+int32_t 	add_colors(double *color_a, double *color_b);
 
 #endif

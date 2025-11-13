@@ -22,6 +22,7 @@ void	update_image(t_app *window)
 	mlx_delete_image(window->mlx, window->current);
 	mlx_image_to_window(window->mlx, new, 0, 0);
 	window->current = new;
+	window->last_render_time = mlx_get_time();
 }
 
 static bool	is_pan_key(keys_t key)

@@ -14,6 +14,19 @@ void	free_window(t_app *window)
 	}
 }
 
+void	check_pending_resize(void *param)
+{
+	t_app	*window;
+
+	window = (t_app *)param;
+	if (!window->resize_pending)
+		return;
+	else if (!mlx_is_mouse_down(window->mlx, MLX_MOUSE_BUTTON_LEFT))
+	{
+		window->resize_pending = false;
+		update_image(window);
+	}
+}
 
 void	make_window(t_scene *scene, t_app *window)
 {
@@ -37,4 +50,9 @@ void	make_window(t_scene *scene, t_app *window)
 	mlx_key_hook(window->mlx, handle_keys, window);
 	mlx_close_hook(window->mlx, ft_exit, window);
 	mlx_resize_hook(window->mlx, handle_resize, window);
+	if (! mlx_loop_hook(window->mlx, check_pending_resize, window))
+	{
+		window->exit_code = 1;
+		ft_exit(window);
+	}
 }

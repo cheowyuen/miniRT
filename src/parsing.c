@@ -94,7 +94,7 @@ t_light	*make_light(char *str, t_scene *scene, bool ambient)
 		i += temp;
 	}
  	light->intensity = ft_atod(str + i, &i, ' ');
-	if (i <= 0)
+	if (i <= 0 || light->intensity < 0 || light->intensity > 1)
 		parse_error("error parsing intensity on line: ", str, scene, light);
 	if (parse_color(&light->color, str + i) == -1)
 		parse_error("error parsing color on line: ", str, scene, light);

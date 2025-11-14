@@ -4,3 +4,5 @@ obj/
 /MLX/build
 miniRT
 .vscode
+unit_tests/*
+!unit_tests/*.*

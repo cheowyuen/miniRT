@@ -18,7 +18,7 @@
 #define	QUAD 0.001f
 #define HEIGHT 1000
 #define WIDTH 1000
-#define ROTATION_ANGLE 0.05
+#define ROTATION_ANGLE 0.2
 
 typedef enum e_type{
 	SPHERE,
@@ -175,6 +175,8 @@ bool		cal_t(double a, double b, double discriminant, double *t);
 
 //translation.c
 void		move_camera(keys_t key, t_app *window);
+
+//resize.c
 void 		resize_obj(keys_t key, t_app *window);
 void		handle_resize(int32_t width, int32_t height, void* param);
 

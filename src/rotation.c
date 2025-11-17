@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:56:49 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/08 11:48:44 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/17 12:41:38 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,23 @@ static void	update_vec(keys_t key, double *vec, t_app *window)
 	obj = s->objects[s->selected_index];
 	if (s->selected_type == SELECT_OBJECT && obj->type != SPHERE)
 	{
-		if (key == MLX_KEY_U || key == MLX_KEY_O)
-			copy_vec(obj->up, vec);
-		else
-			copy_vec(obj->orientation, vec);
+		// if (key == MLX_KEY_U || key == MLX_KEY_O)
+		// 	copy_vec(obj->up, vec);
+		// else
+		// 	copy_vec(obj->orientation, vec);
+		copy_vec(obj->orientation, vec);
 		cal_vec(obj->orientation, obj->up, right, false);
 	}
 	else if (s->selected_type == SELECT_CAMERA)
 	{
-		if (key == MLX_KEY_U || key == MLX_KEY_O)
-			copy_vec(s->camera->up, vec);
-		else
-			copy_vec(s->camera->direction, vec);
+		// if (key == MLX_KEY_U || key == MLX_KEY_O)
+		// 	copy_vec(s->camera->up, vec);
+		// else
+		// 	copy_vec(s->camera->direction, vec);
+		copy_vec(s->camera->direction, vec);
 		setup_geometry(s->camera, false, window->width, window->height);
 	}
+	printf("Updated vec for key %d: x=%f y=%f z=%f\n", key, vec[0], vec[1], vec[2]);
 }
 
 void	pan_camera(keys_t key, t_app *window)
@@ -90,17 +93,17 @@ void	pan_camera(keys_t key, t_app *window)
 	if (!(is_rotatable(s, direction, up, right)))
 		return ;
 	if (key == MLX_KEY_I)
-		rotate_vec(direction, up, -ROTATION_ANGLE, vec);
-	else if (key == MLX_KEY_K)
 		rotate_vec(direction, up, ROTATION_ANGLE, vec);
+	else if (key == MLX_KEY_K)
+		rotate_vec(direction, up, -ROTATION_ANGLE, vec);
 	else if (key == MLX_KEY_J)
-		rotate_vec(direction, right, -ROTATION_ANGLE, vec);
-	else if (key == MLX_KEY_L)
 		rotate_vec(direction, right, ROTATION_ANGLE, vec);
-	else if (key == MLX_KEY_U)
-		rotate_vec(up, direction, ROTATION_ANGLE, vec);
-	else if (key == MLX_KEY_O)
-		rotate_vec(up, direction, -ROTATION_ANGLE, vec);
+	else if (key == MLX_KEY_L)
+		rotate_vec(direction, right, -ROTATION_ANGLE, vec);
+	// else if (key == MLX_KEY_U)
+	// 	rotate_vec(up, direction, ROTATION_ANGLE, vec);
+	// else if (key == MLX_KEY_O)
+	// 	rotate_vec(up, direction, -ROTATION_ANGLE, vec);
 	update_vec(key, vec, window);
 	update_image(window);
 }

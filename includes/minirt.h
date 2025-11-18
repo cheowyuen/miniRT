@@ -18,7 +18,7 @@
 #define	QUAD 0.001f
 #define HEIGHT 1000
 #define WIDTH 1000
-#define ROTATION_ANGLE 0.2
+#define ROTATION_ANGLE 0.05
 
 typedef enum e_type{
 	SPHERE,

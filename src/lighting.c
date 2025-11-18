@@ -85,8 +85,13 @@ int32_t	get_color(t_point *p, t_scene *s)
 
 	blend_colors(ambient, p->object->color, s->ambient->color);
 	mult_vec(ambient, ambient, s->ambient->intensity);
-	blend_colors(light, p->object->color, s->light->color);
-	mult_vec(light, light, get_light_intensity(p, s));
+	if (s->light)
+	{
+		blend_colors(light, p->object->color, s->light->color);
+		mult_vec(light, light, get_light_intensity(p, s));
+		return (add_colors(ambient, light));
+	}
+	ft_bzero(light, 3 * sizeof(double));
 	return (add_colors(ambient, light));
 }
 

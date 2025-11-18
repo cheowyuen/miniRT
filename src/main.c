@@ -29,7 +29,6 @@ static void run_scene(t_scene *scene)
 {
 	t_app	window;
 
-	mlx_set_setting(MLX_VSYNC, true);
 	make_window(scene, &window);
 	update_image(&window);
 	print_selected_element(window.scene);

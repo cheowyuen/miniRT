@@ -28,7 +28,7 @@ void	update_image(t_app *window)
 static bool	is_pan_key(keys_t key)
 {
 	int				i;
-	const keys_t	pans[6] = {MLX_KEY_U, MLX_KEY_I, MLX_KEY_O, MLX_KEY_J,\
+	const keys_t	pans[6] = {MLX_KEY_I, MLX_KEY_J,\
  MLX_KEY_K, MLX_KEY_L};
 
 	i = -1;

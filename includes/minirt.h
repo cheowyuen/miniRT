@@ -19,7 +19,7 @@
 #define HEIGHT 1000
 #define WIDTH 1000
 #define REDRAW_INTERVAL 3.0
-#define ROTATION_ANGLE 0.2
+#define ROTATION_ANGLE 0.05
 
 typedef enum e_type{
 	SPHERE,

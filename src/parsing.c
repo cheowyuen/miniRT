@@ -1,5 +1,44 @@
 #include "minirt.h"
 
+void	check_in_objects(t_scene *s)
+{
+	size_t		i;
+	t_object	*obj;
+	t_camera	*c;
+	double		vec[3];
+	double		d;
+	double		axis[3];
+	double		mult[3];
+
+	i = 0;
+	c = s->camera;
+	while (i < s->num_objects)
+	{
+		obj = s->objects[i];
+		sub_vec(vec, c->position, obj->position);
+		if (obj->type == SPHERE)
+		{
+			if (abs_vec(vec) < obj->radius)
+				parse_error("Invalid camera position", NULL, s, NULL);
+		}
+		else if (obj->type == CYLINDER)
+		{
+			d = dot_prod(vec, obj->orientation);
+			if (d < 0 || d > obj->height)
+			{
+				i++;
+				continue ;
+			}
+			mult_vec(mult, obj->orientation, d);
+			add_vec(axis, obj->position, mult);
+			sub_vec(vec, c->position, axis);
+			if (abs_vec(vec) < obj->radius)
+				parse_error("Invalid camera position", NULL, s, NULL);
+		}
+		i++;
+	}
+}
+
 bool	is_normal(double *vec)
 {
 	double length;
@@ -267,6 +306,7 @@ t_scene	*parse_scene(char *filename)
 		s->line = get_next_line(s->fd);
 	}
 	check_requirements(s);
+	check_in_objects(s);
 	s->selected_type = SELECT_OBJECT;
 	s->selected_index = 0;
 	return (s);

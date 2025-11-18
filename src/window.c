@@ -47,7 +47,7 @@ temp[1], temp[2]);
 	}
 	else if (s->selected_type == SELECT_CAMERA)
 	{
-		temp = s->light->position;
+		temp = s->camera->position;
 		printf(format, "camera", temp[0], temp[1], temp[2]);
 	}
 }

@@ -1,5 +1,12 @@
 #include "minirt.h"
 
+static int	skip_spaces(char *str, int i)
+{
+	while (str[i] == ' ')
+		++i;
+	return (i);
+}
+
 t_camera	*make_camera(char *str, t_scene *scene)
 {
 	t_camera	*camera;
@@ -10,20 +17,17 @@ t_camera	*make_camera(char *str, t_scene *scene)
 	camera = ft_calloc(1, sizeof(t_camera));
 	if (!camera)
 		parse_error("malloc error: ", strerror(errno), scene, NULL);
-	while (str[i] == ' ')
-		++i;
+	i = skip_spaces(str, i);
 	temp = parse_triplet(camera->position, str + i);
 	if (temp == -1)
 		parse_error("error parsing position on line: ", str, scene, camera);
 	i += temp;
-	while (str[i] == ' ')
-		++i;
+	i = skip_spaces(str, i);
 	temp = parse_triplet(camera->direction, str + i);
 	if (temp == -1)
 		parse_error("error parsing direction on line: ", str, scene, camera);
 	i += temp;
-	while (str[i] == ' ')
-		++i;
+	i = skip_spaces(str, i);
 	camera->fov = ft_atoi(str + i); 
 	if (camera->fov < 0 || camera->fov > 180)
 		parse_error("error parsing fov on line: ", str, scene, camera);

@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:56:49 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/18 11:22:44 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/20 12:02:01 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	update_vec(keys_t key, double *vec, t_app *window)
 	else if (s->selected_type == SELECT_CAMERA)
 	{
 		copy_vec(s->camera->direction, vec);
-		setup_geometry(s->camera, false, window->width, window->height);
+		setup_geometry(s->camera, window->width, window->height);
 	}
 	printf("Updated vec for key %d: x=%f y=%f z=%f\n", key, vec[0], vec[1], vec[2]);
 }

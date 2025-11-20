@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:49:58 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/08 17:57:49 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/20 11:56:39 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,13 @@ void	proj_perpendicular(double *vec, double *axis, double *result)
 	sub_vec(result, vec, result);
 }
 
-t_ray	make_ray(double *origin, double pixel_pos[3])
-{
-	t_ray	ray;
-
-	copy_vec(ray.origin, origin);
-	sub_vec(ray.direction, pixel_pos, origin);
-	normalize(ray.direction);
-	return (ray);
-}
-
 void	add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy)
 {
-	pos[0] = camera->zero_coords[0] + camera->delta_x[0] * cx
+	pos[0] = camera->zero[0] + camera->delta_x[0] * cx
 		+ camera->delta_y[0] * cy;
-	pos[1] = camera->zero_coords[1] + camera->delta_x[1] * cx
+	pos[1] = camera->zero[1] + camera->delta_x[1] * cx
 		+ camera->delta_y[1] * cy;
-	pos[2] = camera->zero_coords[2] + camera->delta_x[2] * cx
+	pos[2] = camera->zero[2] + camera->delta_x[2] * cx
 		+ camera->delta_y[2] * cy;
 }
 

@@ -7,6 +7,8 @@ void	update_image(t_app *window)
 	mlx_image_t	*new;
 
 	ft_memset(xy, 0, sizeof(uint32_t) * 2);
+	window->scene->camera->inverse_w = 1.0 / window->width;
+	window->scene->camera->inverse_h = 1.0 / window->height;
 	new = mlx_new_image(window->mlx, (uint32_t)window->width, (uint32_t)window->height);
 	while (xy[0] < (uint32_t)window->width)
 	{

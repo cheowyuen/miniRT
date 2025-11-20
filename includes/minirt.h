@@ -37,10 +37,15 @@ typedef struct s_camera{
 	double	position[3];
 	double	direction[3];
 	double	fov;
-	double	zero_coords[3];
+	double	zero[3];
 	double	delta_x[3];
 	double	delta_y[3];
 	double	up[3];
+	double	right[3];
+	double	h;
+	double	w;
+	double	inverse_w;
+	double	inverse_h;
 } t_camera;
 
 typedef struct s_light{
@@ -124,9 +129,11 @@ ssize_t		parse_color(int32_t *color, char *str);
 ssize_t		parse_triplet(double *target, char *str);
 
 //parsing_utils.c
-void		setup_geometry(t_camera *c, bool is_init, int32_t width, int32_t height);
 void		cal_right(double *right, double *default_up, double *direction);
 void		cal_vec(double *direction, double *up, double *right, bool is_init);
+
+//camera.c
+void		setup_geometry(t_camera *c, int32_t width, int32_t height);
 
 //vector.c
 void		add_vec(double *target, double *a, double *b);
@@ -167,10 +174,13 @@ bool		hit_plane(t_ray ray, t_object *plane, double *t);
 
 //ray_utils.c
 void		make_point(t_point *p, double *position, t_object *object);
-t_ray		make_ray(double *origin, double pixel_pos[3]);
 void		hit_points(double *hit, double *origin, double *direction, double t);
 void		proj_perpendicular(double *vec, double *axis, double *result);
 void 		add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy);
+
+//ray_makers.c
+t_ray		make_ray(t_camera *c, uint32_t cx, uint32_t cy);
+t_ray		make_ray_to_point(double *origin, double *target);
 
 //cylinder.c
 bool		hit_cylinder(t_ray ray, t_object *cylinder, double *t);

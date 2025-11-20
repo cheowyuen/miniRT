@@ -6,10 +6,9 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:50:17 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/17 10:14:30 by cwong            ###   ########.fr       */
+/*   Updated: 2025/11/20 10:48:57 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minirt.h"
 
 bool	hit_object(double *dir, double *oc, double r, double *t)
@@ -94,11 +93,9 @@ int32_t	color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy)
 	t_ray		ray;
 	t_hit		hit_info;
 	double		hit[3];
-	double		pixel_pos[3];
 	t_point		p;
 
-	add_scaled_vecs(pixel_pos, scene->camera, cx, cy);
-	ray = make_ray(scene->camera->position, pixel_pos);
+	ray = make_ray(scene->camera, cx, cy);
 	hit_info.t = INFINITY;
 	hit_info.obj = NULL;
 	loop_objects(scene, ray, &hit_info);

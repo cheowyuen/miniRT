@@ -29,6 +29,7 @@ static void run_scene(t_scene *scene)
 {
 	t_app	window;
 
+	ft_bzero(&window, sizeof(t_app));
 	make_window(scene, &window);
 	update_image(&window);
 	print_selected_element(window.scene);

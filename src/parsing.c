@@ -109,7 +109,7 @@ t_camera	*make_camera(char *str, t_scene *scene)
 	camera->fov = ft_atoi(str + i); 
 	if (camera->fov < 0 || camera->fov > 180)
 		parse_error("error parsing fov on line: ", str, scene, camera);
-	setup_geometry(camera, true, WIDTH, HEIGHT);
+	setup_geometry(camera, WIDTH, HEIGHT);
 	return (camera);
 }
 

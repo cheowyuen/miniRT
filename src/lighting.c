@@ -67,7 +67,7 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 	add_vec(offset_point, p->point, temp);
 	sub_vec(temp, l->position, offset_point);
 	distance = abs_vec(temp);
-	ray = make_ray(offset_point, l->position);
+	ray = make_ray_to_point(offset_point, l->position);
 	i = 0;
 	while (i < s->num_objects)
 	{

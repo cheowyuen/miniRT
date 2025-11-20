@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 09:33:25 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/18 11:02:18 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/20 12:01:03 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	handle_resize(int32_t width, int32_t height, void *param)
 	window = (t_app *)param;
 	window->width = width;
 	window->height = height;
-	setup_geometry(window->scene->camera, false, width, height);
+	setup_geometry(window->scene->camera, width, height);
 	window->resize_pending = true;
 	current_time = mlx_get_time();
 	if (current_time - window->last_render_time >= REDRAW_INTERVAL)

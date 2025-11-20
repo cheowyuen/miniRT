@@ -105,7 +105,6 @@ typedef struct s_vec{
 
 //parsing.c
 t_scene		*parse_scene(char *filename);
-void		check_requirements(t_scene *scene);
 t_camera	*make_camera(char *str, t_scene *scene);
 t_light		*make_light(char *str, t_scene *scene, bool ambient);
 void		parse_plane(char *str, t_object *object, t_scene *scene);
@@ -182,5 +181,9 @@ void		handle_resize(int32_t width, int32_t height, void* param);
 
 //rotation.c
 void		pan_camera(keys_t key, t_app *window);
+
+//validate_scene.c
+void		check_in_objects(t_scene *s);
+void		check_requirements(t_scene *scene);
 
 #endif

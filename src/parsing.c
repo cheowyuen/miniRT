@@ -1,85 +1,10 @@
 #include "minirt.h"
 
-void	check_in_objects(t_scene *s)
+static int	skip_spaces(char *str, int i)
 {
-	size_t		i;
-	t_object	*obj;
-	t_camera	*c;
-	double		vec[3];
-	double		d;
-	double		axis[3];
-	double		mult[3];
-
-	i = 0;
-	c = s->camera;
-	while (i < s->num_objects)
-	{
-		obj = s->objects[i];
-		sub_vec(vec, c->position, obj->position);
-		if (obj->type == SPHERE)
-		{
-			if (abs_vec(vec) < obj->radius)
-				parse_error("Invalid camera position", NULL, s, NULL);
-		}
-		else if (obj->type == CYLINDER)
-		{
-			d = dot_prod(vec, obj->orientation);
-			if (d < 0 || d > obj->height)
-			{
-				i++;
-				continue ;
-			}
-			mult_vec(mult, obj->orientation, d);
-			add_vec(axis, obj->position, mult);
-			sub_vec(vec, c->position, axis);
-			if (abs_vec(vec) < obj->radius)
-				parse_error("Invalid camera position", NULL, s, NULL);
-		}
-		i++;
-	}
-}
-
-bool	is_normal(double *vec)
-{
-	double length;
-
-	length = abs_vec(vec);
-	if (length > 1.0)
-	{
-		if (vec[0] >= -1.0 && vec[0] <= 1.0 && vec[1] >= -1.0 && vec[1] <= 1.0\
- && vec[2] >= -1.0 && vec[2] <= 1.0 && length > 0.0001)
-		{
-			printf("Warning: components of vector in range [-1,1] but vector \
-is not normalized, normalizing\n");
-			normalize(vec);
-		}
-		else 
-			return (false);
-	}
-	if (length < 0.0001)
-		return (false);
-	return (true);
-}
-
-void	check_requirements(t_scene *scene)
-{
-	int i;
-
-	if (!scene->camera)
-		parse_error("No camera defined", NULL, scene, NULL);
-	if (!scene->ambient)
-		parse_error("No ambient light defined", NULL, scene, NULL);
-	if (scene->num_objects == 0)
-		parse_error("No objects defined", NULL, scene, NULL);
-	if (!is_normal(scene->camera->direction))
-		parse_error("Camera direction not normalized", NULL, scene, NULL);
-	i = -1;
-	while (++i < (int)scene->num_objects)
-	{
-		if ((scene->objects[i]->type == PLANE || scene->objects[i]->type == \
-CYLINDER) && !is_normal(scene->objects[i]->orientation))
-			parse_error("Object orientation not normalized", NULL, scene, NULL);
-	}
+	while (str[i] == ' ')
+		++i;
+	return (i);
 }
 
 t_camera	*make_camera(char *str, t_scene *scene)
@@ -92,20 +17,17 @@ t_camera	*make_camera(char *str, t_scene *scene)
 	camera = ft_calloc(1, sizeof(t_camera));
 	if (!camera)
 		parse_error("malloc error: ", strerror(errno), scene, NULL);
-	while (str[i] == ' ')
-		++i;
+	i = skip_spaces(str, i);
 	temp = parse_triplet(camera->position, str + i);
 	if (temp == -1)
 		parse_error("error parsing position on line: ", str, scene, camera);
 	i += temp;
-	while (str[i] == ' ')
-		++i;
+	i = skip_spaces(str, i);
 	temp = parse_triplet(camera->direction, str + i);
 	if (temp == -1)
 		parse_error("error parsing direction on line: ", str, scene, camera);
 	i += temp;
-	while (str[i] == ' ')
-		++i;
+	i = skip_spaces(str, i);
 	camera->fov = ft_atoi(str + i); 
 	if (camera->fov < 0 || camera->fov > 180)
 		parse_error("error parsing fov on line: ", str, scene, camera);

@@ -14,8 +14,8 @@
 #include "libft.h"
 
 #define EPSILON 1e-3
-#define	LINEAR 0.01f
-#define	QUAD 0.001f
+#define	LINEAR 0.01
+#define	QUAD 0.001
 #define HEIGHT 1000
 #define WIDTH 1000
 #define REDRAW_INTERVAL 3.0
@@ -113,7 +113,6 @@ typedef struct s_vec{
 
 //parsing.c
 t_scene		*parse_scene(char *filename);
-void		check_requirements(t_scene *scene);
 t_camera	*make_camera(char *str, t_scene *scene);
 t_light		*make_light(char *str, t_scene *scene, bool ambient);
 void		parse_plane(char *str, t_object *object, t_scene *scene);
@@ -200,5 +199,9 @@ void		pan_camera(keys_t key, t_app *window);
 //colors.c
 void 		blend_colors(double *target, int32_t a, int32_t b);
 int32_t 	add_colors(double *color_a, double *color_b);
+
+//validate_scene.c
+void		check_in_objects(t_scene *s);
+void		check_requirements(t_scene *scene);
 
 #endif

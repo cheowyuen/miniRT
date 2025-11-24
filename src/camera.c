@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:25:08 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/20 11:51:38 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/24 09:47:43 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	setup_perspective(t_camera *c, int32_t width, int32_t height)
 	{
 		c->delta_x[i] = c->right[i] * vw / width;
 		c->delta_y[i] = -c->up[i] * vh / height;
-		c->zero[i] = c->position[i] + c->direction[i] - \
+		c->zero[i] = c->direction[i] - \
 c->delta_x[i] * (width / 2.0) - c->delta_y[i] * (height / 2.0);
 	}
 }

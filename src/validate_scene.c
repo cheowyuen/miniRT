@@ -53,13 +53,13 @@ void	check_in_objects(t_scene *s)
 	int			i;
 
 	c = s->camera;
-	copy_vec(corners[0], c->zero_coords);
+	copy_vec(corners[0], c->zero);
 	mult_vec(w, c->delta_x, WIDTH);
-	add_vec(corners[1], c->zero_coords, w);
+	add_vec(corners[1], c->zero, w);
 	mult_vec(h, c->delta_y, HEIGHT);
-	add_vec(corners[2], c->zero_coords, h);
+	add_vec(corners[2], c->zero, h);
 	add_vec(corners[3], w, h);
-	add_vec(corners[3], c->zero_coords, corners[3]);
+	add_vec(corners[3], c->zero, corners[3]);
 	validate_position(s, c->position, "Invalid camera position");
 	i = 0;
 	while (i < 4)

@@ -6,6 +6,7 @@ void	update_image(t_app *window)
 	int32_t		color;
 	mlx_image_t	*new;
 
+	check_in_objects(window->scene);
 	ft_memset(xy, 0, sizeof(uint32_t) * 2);
 	window->scene->camera->inverse_w = 1.0 / window->width;
 	window->scene->camera->inverse_h = 1.0 / window->height;

@@ -6,7 +6,7 @@ static bool	intersect_cylinder(t_object *obj, double *pos)
 	double		axis[3];
 	double		mult[3];
 	double		vec[3];
-
+	
 	sub_vec(vec, pos, obj->position);
 	d = dot_prod(vec, obj->orientation);
 	if (d < -obj->height / 2 || d > obj->height / 2)
@@ -47,25 +47,32 @@ static void	validate_position(t_scene *s, double *pos, char *err_msg)
 void	check_in_objects(t_scene *s)
 {
 	t_camera	*c;
-	double		corners[4][3];
-	double		w[3];
-	double		h[3];
 	int			i;
+	int			y;
+	int			x;
+	double		pos[3];
 
 	c = s->camera;
-	copy_vec(corners[0], c->zero);
-	mult_vec(w, c->delta_x, WIDTH);
-	add_vec(corners[1], c->zero, w);
-	mult_vec(h, c->delta_y, HEIGHT);
-	add_vec(corners[2], c->zero, h);
-	add_vec(corners[3], w, h);
-	add_vec(corners[3], c->zero, corners[3]);
 	validate_position(s, c->position, "Invalid camera position");
-	i = 0;
-	while (i < 4)
+	if (c->fov == 0)
 	{
-		validate_position(s, corners[i], "Invalid viewport position");
-		i++;
+		y = 0;
+		while (y < HEIGHT)
+		{
+			x = 0;
+			while (x < WIDTH)
+			{
+				i = 0;
+				while (i < 3)
+				{
+					pos[i] = c->zero[i] + c->delta_x[i] * x + c->delta_y[i] * y;
+					i++;
+				}
+				validate_position(s, pos, "Invalid viewport position");
+				x++;
+			}
+			y++;
+		}
 	}
 }
 

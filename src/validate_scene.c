@@ -19,7 +19,7 @@ static bool	intersect_cylinder(t_object *obj, double *pos)
 	return (false);
 }
 
-static void	validate_position(t_scene *s, double *pos, char *err_msg)
+static bool	validate_position(t_scene *s, double *pos, char *str, bool close)
 {
 	size_t		i;
 	t_object	*obj;
@@ -33,18 +33,35 @@ static void	validate_position(t_scene *s, double *pos, char *err_msg)
 		{
 			sub_vec(vec, pos, obj->position);
 			if (abs_vec(vec) <= obj->radius + 1e-2)
-				parse_error(err_msg, NULL, s, NULL);
+			{
+				if (close)
+					parse_error(str, NULL, s, NULL);
+				else
+				{
+					printf("Error\n%s\n", str);
+					return (false);
+				}
+			}
 		}
 		else if (obj->type == CYLINDER)
 		{
 			if (intersect_cylinder(obj, pos))
-				parse_error(err_msg, NULL, s, NULL);
+			{
+				if (close)
+					parse_error(str, NULL, s, NULL);
+				else
+				{
+					printf("Error\n%s\n", str);
+					return (false);
+				}
+			}
 		}
 		i++;
 	}
+	return (true);
 }
 
-void	check_in_objects(t_scene *s)
+bool	check_in_objects(t_scene *s, bool close)
 {
 	t_camera	*c;
 	int			i;
@@ -53,7 +70,8 @@ void	check_in_objects(t_scene *s)
 	double		pos[3];
 
 	c = s->camera;
-	validate_position(s, c->position, "Invalid camera position");
+	if (!validate_position(s, c->position, "Invalid camera position", close))
+		return (false);
 	if (c->fov == 0)
 	{
 		y = 0;
@@ -68,12 +86,14 @@ void	check_in_objects(t_scene *s)
 					pos[i] = c->zero[i] + c->delta_x[i] * x + c->delta_y[i] * y;
 					i++;
 				}
-				validate_position(s, pos, "Invalid viewport position");
+				if (!validate_position(s, pos, "Invalid viewport position", close))
+					return (false);
 				x++;
 			}
 			y++;
 		}
 	}
+	return (true);
 }
 
 static bool	is_normal(double *vec)

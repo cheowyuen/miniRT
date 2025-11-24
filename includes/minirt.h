@@ -201,7 +201,7 @@ void 		blend_colors(double *target, int32_t a, int32_t b);
 int32_t 	add_colors(double *color_a, double *color_b);
 
 //validate_scene.c
-void		check_in_objects(t_scene *s);
+bool		check_in_objects(t_scene *s, bool close);
 void		check_requirements(t_scene *scene);
 
 #endif

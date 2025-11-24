@@ -228,7 +228,7 @@ t_scene	*parse_scene(char *filename)
 		s->line = get_next_line(s->fd);
 	}
 	check_requirements(s);
-	check_in_objects(s);
+	check_in_objects(s, true);
 	s->selected_type = SELECT_OBJECT;
 	s->selected_index = 0;
 	return (s);

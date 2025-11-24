@@ -1,13 +1,14 @@
 #include "minirt.h"
 
-static ssize_t	parse_whole_number(double *value, char *str, int *read, char delim)
+static ssize_t	parse_whole_number(double *value, char *str, int *read, \
+char delim)
 {
 	ssize_t	i;
 
 	i = 0;
 	while (str[i] && ft_isdigit((int)str[i]) && !isinf(*value))
 	{
-		*value =  *value * 10 + str[i] - '0';
+		*value = *value * 10 + str[i] - '0';
 		++i;
 	}
 	if (i != 0 && (str[i] == '\0' || str[i] == delim) && !isinf(*value))
@@ -29,7 +30,7 @@ static ssize_t	parse_fractions(double *value, char *str, int *read, char delim)
 	double	divisor;
 	ssize_t	i;
 
-	divisor = 10.0 * copysign(1.0, *value); //if value was negative, fractions need to be negative as well
+	divisor = 10.0 * copysign(1.0, *value);
 	i = 0;
 	while (str[i] && ft_isdigit((int)str[i]))
 	{
@@ -46,17 +47,14 @@ static ssize_t	parse_fractions(double *value, char *str, int *read, char delim)
 	return (i + 1);
 }
 
-double ft_atod(char *line, int *read, char delimiter)
+double	ft_atod(char *line, int *read, char delimiter)
 {
 	double	value;
 	int		sign;
 	ssize_t	i;
 
-	while (*line == ' ')
-	{
+	while (*line == ' ' && ++(*read))
 		line++;
-		(*read)++;
-	}
 	value = 0.0;
 	sign = 1;
 	if (*(line++) == '-')
@@ -65,86 +63,60 @@ double ft_atod(char *line, int *read, char delimiter)
 		--line;
 	*read += (sign == -1);
 	i = parse_whole_number(&value, line, read, delimiter);
-	if (i == -1)
-		return (value * sign);
-	line = line + i;
-	i = parse_fractions(&value, line, read, delimiter);
-	if (i < 0)
+	if (i != -1)
 	{
-		*read = -1;
-		return (value * sign);
+		line += i;
+		if (parse_fractions(&value, line, read, delimiter) < 0)
+			*read = -1;
 	}
 	return (value * sign);
 }
 
 ssize_t	parse_color(int32_t *color, char *str)
 {
-	int		channel;
-	int		temp;
+	int		c;
+	int		val;
 	ssize_t	i;
 
 	while (*str == ' ')
 		str++;
-	channel = 0;
+	c = -1;
 	i = 0;
-	while (channel < 3)
+	while (++c < 3)
 	{
-		temp = 0;
-		while (ft_isdigit(str[i]) && str[i])
-		{
-			temp *= 10;
-			temp += str[i] - '0';
-			++i;
-		}
-		if (i == 0 || (str[i] != ',' && !(channel == 2 && str[i] == '\0')) || temp > 255)
+		val = 0;
+		if (!ft_isdigit(str[i]))
 			return (-1);
-		else
-			++i;
-		// allow trailing spaces at end of line
-		// if (i == 0 || (channel < 2 && str[i] != ',') || temp > 255)
-		// 	return (-1);
-		// if (channel < 2)
-		// 	++i;
-		*color = (*color << 8) | temp;
-		++channel;
+		while (ft_isdigit(str[i]))
+			val = val * 10 + (str[i++] - '0');
+		if (val > 255 || (c < 2 && str[i++] != ',') || (c == 2 && str[i]))
+			return (-1);
+		*color = (*color << 8) | val;
 	}
-	// while (str[i] == ' ')
-	// 	++i;
-	// if (str[i] != '\0')
-	// 	return (-1);
 	*color = (*color << 8);
 	return (i);
 }
 
 ssize_t	parse_triplet(double *target, char *str)
 {
-	double	temp;
-	ssize_t	count;
-	int		read;
-	int		index;
+	const char	*delims = ",, ";
+	double		temp;
+	ssize_t		count;
+	int			read;
+	int			index;
 
-	index = 0;
+	index = -1;
 	count = 0;
-	while (*str == ' ')
-	{
+	while (*str == ' ' && ++count)
 		str++;
-		count++;
-	}
-	while (index < 2)
+	while (++index < 3)
 	{
 		read = 0;
-		temp = ft_atod(str, &read, ',');
-		if (read == -1 || str[read] == '\0')
+		target[index] = ft_atod(str, &read, delims[index]);
+		if (read == -1 || (index < 2 && str[read] == '\0'))
 			return (-1);
- 		str += read;
+		str += read;
 		count += read;
-		target[index++] = temp;
 	}
-	read = 0;
-	temp = ft_atod(str, &read, ' ');
-	if (read == -1)
-		return (-1);
-	count += read;
-	target[index] = temp;
 	return (count);
 }

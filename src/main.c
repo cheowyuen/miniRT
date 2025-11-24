@@ -11,9 +11,9 @@ void	ft_exit(void *param)
 	exit(window->exit_code);
 }
 
-void free_scene(t_scene *scene)
+void	free_scene(t_scene *scene)
 {
-	int i;
+	int	i;
 
 	free(scene->camera);
 	free(scene->ambient);
@@ -25,7 +25,7 @@ void free_scene(t_scene *scene)
 	free(scene);
 }
 
-static void run_scene(t_scene *scene)
+static void	run_scene(t_scene *scene)
 {
 	t_app	window;
 
@@ -38,14 +38,14 @@ static void run_scene(t_scene *scene)
 	ft_exit(&window);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_scene	*scene;
 
 	if (argc != 2)
 	{
-	    printf("Please give a filename as argument\n");
-	    return (1);
+		printf("Please give a filename as argument\n");
+		return (1);
 	}
 	scene = parse_scene(argv[1]);
 	run_scene(scene);

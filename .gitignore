@@ -6,3 +6,4 @@ miniRT
 .vscode
 unit_tests/*
 !unit_tests/*.*
+tags

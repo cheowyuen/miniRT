@@ -9,7 +9,8 @@ void	update_image(t_app *window)
 	ft_memset(xy, 0, sizeof(uint32_t) * 2);
 	window->scene->camera->inverse_w = 1.0 / window->width;
 	window->scene->camera->inverse_h = 1.0 / window->height;
-	new = mlx_new_image(window->mlx, (uint32_t)window->width, (uint32_t)window->height);
+	new = mlx_new_image(window->mlx, (uint32_t)window->width, \
+(uint32_t)window->height);
 	while (xy[0] < (uint32_t)window->width)
 	{
 		while (xy[1] < (uint32_t)window->height)
@@ -30,31 +31,30 @@ void	update_image(t_app *window)
 static bool	is_pan_key(keys_t key)
 {
 	int				i;
-	const keys_t	pans[6] = {MLX_KEY_I, MLX_KEY_J,\
- MLX_KEY_K, MLX_KEY_L};
+	const keys_t	pans[6] = {MLX_KEY_I, MLX_KEY_J, MLX_KEY_K, MLX_KEY_L};
 
 	i = -1;
 	while (++i < 6)
 	{
 		if (key == pans[i])
-			return true;
+			return (true);
 	}
-	return false;
+	return (false);
 }
 
 static bool	is_movement_key(keys_t key)
 {
 	int				i;
-	const keys_t	movements[6] = {MLX_KEY_Q, MLX_KEY_W, MLX_KEY_E, MLX_KEY_A,\
- MLX_KEY_S, MLX_KEY_D};
+	const keys_t	movements[6] = {MLX_KEY_Q, MLX_KEY_W, MLX_KEY_E, \
+MLX_KEY_A, MLX_KEY_S, MLX_KEY_D};
 
 	i = -1;
 	while (++i < 6)
 	{
 		if (key == movements[i])
-			return true;
+			return (true);
 	}
-	return false;
+	return (false);
 }
 
 static void	cycle_selection(t_scene *s)
@@ -81,7 +81,7 @@ static void	cycle_selection(t_scene *s)
 void	handle_keys(mlx_key_data_t keydata, void *param)
 {
 	t_app	*window;
-	
+
 	window = (t_app *)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
@@ -94,6 +94,7 @@ void	handle_keys(mlx_key_data_t keydata, void *param)
 		move_camera(keydata.key, window);
 	if (is_pan_key(keydata.key) && keydata.action == MLX_PRESS)
 		pan_camera(keydata.key, window);
-	if ((keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN) && keydata.action == MLX_PRESS)
+	if ((keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN) && \
+keydata.action == MLX_PRESS)
 		resize_obj(keydata.key, window);
 }

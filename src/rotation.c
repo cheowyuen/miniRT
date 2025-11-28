@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:56:49 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/20 12:02:01 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:36:00 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static bool	is_rotatable(t_scene *s, double *direction, double *up,
 	return (true);
 }
 
-static void	update_vec(keys_t key, double *vec, t_app *window)
+static void	update_vec(double *vec, t_app *window)
 {
 	t_scene		*s;
 	t_object	*obj;
@@ -70,7 +70,6 @@ static void	update_vec(keys_t key, double *vec, t_app *window)
 		copy_vec(s->camera->direction, vec);
 		setup_geometry(s->camera, window->width, window->height);
 	}
-	printf("Updated vec for key %d: x=%f y=%f z=%f\n", key, vec[0], vec[1], vec[2]);
 }
 
 void	pan_camera(keys_t key, t_app *window)
@@ -80,10 +79,15 @@ void	pan_camera(keys_t key, t_app *window)
 	t_scene		*s;
 	double		direction[3];
 	double		up[3];
+	bool		valid;
+	double		old_dir[3];
+	t_object	*obj;
 
 	s = window->scene;
+	obj = s->objects[s->selected_index];
 	if (!(is_rotatable(s, direction, up, right)))
 		return ;
+	copy_vec(old_dir, direction);
 	if (key == MLX_KEY_I)
 		rotate_vec(direction, right, ROTATION_ANGLE, vec);
 	else if (key == MLX_KEY_K)
@@ -92,6 +96,15 @@ void	pan_camera(keys_t key, t_app *window)
 		rotate_vec(direction, up, -ROTATION_ANGLE, vec);
 	else if (key == MLX_KEY_L)
 		rotate_vec(direction, up, ROTATION_ANGLE, vec);
-	update_vec(key, vec, window);
+	update_vec(vec, window);
+	valid = check_in_objects(s, false);
+	if (!valid)
+	{
+		if (s->selected_type == SELECT_OBJECT && obj->type != SPHERE)
+			copy_vec(obj->orientation, old_dir);
+		else if (s->selected_type == SELECT_CAMERA)
+			copy_vec(s->camera->direction, old_dir);
+		return ;
+	}
 	update_image(window);
 }

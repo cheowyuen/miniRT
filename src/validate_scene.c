@@ -6,7 +6,7 @@ static bool	intersect_cylinder(t_object *obj, double *pos)
 	double		axis[3];
 	double		mult[3];
 	double		vec[3];
-
+	
 	sub_vec(vec, pos, obj->position);
 	d = dot_prod(vec, obj->orientation);
 	if (d < -obj->height / 2 || d > obj->height / 2)
@@ -19,7 +19,7 @@ static bool	intersect_cylinder(t_object *obj, double *pos)
 	return (false);
 }
 
-static void	validate_position(t_scene *s, double *pos, char *err_msg)
+static bool	validate_position(t_scene *s, double *pos, char *str, bool close)
 {
 	size_t		i;
 	t_object	*obj;
@@ -33,40 +33,67 @@ static void	validate_position(t_scene *s, double *pos, char *err_msg)
 		{
 			sub_vec(vec, pos, obj->position);
 			if (abs_vec(vec) <= obj->radius + 1e-2)
-				parse_error(err_msg, NULL, s, NULL);
+			{
+				if (close)
+					parse_error(str, NULL, s, NULL);
+				else
+				{
+					printf("Error\n%s\n", str);
+					return (false);
+				}
+			}
 		}
 		else if (obj->type == CYLINDER)
 		{
 			if (intersect_cylinder(obj, pos))
-				parse_error(err_msg, NULL, s, NULL);
+			{
+				if (close)
+					parse_error(str, NULL, s, NULL);
+				else
+				{
+					printf("Error\n%s\n", str);
+					return (false);
+				}
+			}
 		}
 		i++;
 	}
+	return (true);
 }
 
-void	check_in_objects(t_scene *s)
+bool	check_in_objects(t_scene *s, bool close)
 {
 	t_camera	*c;
-	double		corners[4][3];
-	double		w[3];
-	double		h[3];
 	int			i;
+	int			y;
+	int			x;
+	double		pos[3];
 
 	c = s->camera;
-	copy_vec(corners[0], c->zero);
-	mult_vec(w, c->delta_x, WIDTH);
-	add_vec(corners[1], c->zero, w);
-	mult_vec(h, c->delta_y, HEIGHT);
-	add_vec(corners[2], c->zero, h);
-	add_vec(corners[3], w, h);
-	add_vec(corners[3], c->zero, corners[3]);
-	validate_position(s, c->position, "Invalid camera position");
-	i = 0;
-	while (i < 4)
+	if (!validate_position(s, c->position, "Invalid camera position", close))
+		return (false);
+	if (c->fov == 0)
 	{
-		validate_position(s, corners[i], "Invalid viewport position");
-		i++;
+		y = 0;
+		while (y < HEIGHT)
+		{
+			x = 0;
+			while (x < WIDTH)
+			{
+				i = 0;
+				while (i < 3)
+				{
+					pos[i] = c->zero[i] + c->delta_x[i] * x + c->delta_y[i] * y;
+					i++;
+				}
+				if (!validate_position(s, pos, "Invalid viewport position", close))
+					return (false);
+				x++;
+			}
+			y++;
+		}
 	}
+	return (true);
 }
 
 static bool	is_normal(double *vec)

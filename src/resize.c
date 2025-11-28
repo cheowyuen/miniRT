@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 09:33:25 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/20 12:01:03 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:27:17 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,14 @@ void	resize_obj(keys_t key, t_app *window)
 	t_object	*obj;
 	double		factor_up;
 	double		factor_down;
+	double		old_radius;
+	double		old_height;
+	bool		valid;
 
 	s = window->scene;
 	obj = s->objects[s->selected_index];
+	old_radius = obj->radius;
+	old_height = obj->height;
 	factor_up = 1.02;
 	factor_down = 0.98;
 	if (key == MLX_KEY_UP)
@@ -38,6 +43,13 @@ void	resize_obj(keys_t key, t_app *window)
 			obj->radius *= factor_down;
 		else if (obj->type == CYLINDER && obj->height * factor_down > 0.01)
 			obj->height *= factor_down;
+	}
+	valid = check_in_objects(s, false);
+	if (!valid)
+	{
+		obj->radius = old_radius;
+		obj->height = old_height;
+		return ;
 	}
 	update_image(window);
 }

@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:55:43 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/18 11:02:42 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/24 12:27:34 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	move_camera(keys_t key, t_app *window)
 	double		right[3];
 	double		default_up[3];
 	t_scene		*s;
+	bool		valid;
+	double		revert[3];
 
 	s = window->scene;
 	ft_bzero(move, sizeof(move));
@@ -83,5 +85,12 @@ void	move_camera(keys_t key, t_app *window)
 	else if (key == MLX_KEY_S)
 		cal_move(move, s->camera->direction, -step);
 	update_position(s, move);
+	valid = check_in_objects(s, false);
+	if (!valid)
+	{
+		mult_vec(revert, move, -1);
+		update_position(s, revert);
+		return ;
+	}
 	update_image(window);
 }

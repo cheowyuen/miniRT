@@ -18,7 +18,7 @@ void	sub_vec(double *target, double *a, double *b)
 }
 
 //the dot product of two vectors
-double dot_prod(double *a, double *b)
+double	dot_prod(double *a, double *b)
 {
 	return (a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
 }
@@ -32,7 +32,7 @@ void	mult_vec(double *target, double *vec, double scale)
 }
 
 //returns the length of a vector
-double abs_vec(double *vec)
+double	abs_vec(double *vec)
 {
 	return (sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]));
 }

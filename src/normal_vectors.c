@@ -1,6 +1,9 @@
 #include "minirt.h"
 
-//check which surface of the cylinder point is on, and write the corresponding normal vector to result
+/*
+	check which surface of the cylinder point is on, and write the corresponding
+	normal vector to result
+*/
 static void	cylinder_normal(t_point *p)
 {
 	double	center_to_point[3];
@@ -8,9 +11,9 @@ static void	cylinder_normal(t_point *p)
 	double	length;
 
 	sub_vec(center_to_point, p->point, p->object->position);
-	length = dot_prod(center_to_point, p->object->orientation); //assumes orientation is a unit vector, so no need to divide by o.o
-	if (fabs(fabs(length) - (p->object->height / 2)) < 0.001f) //on one of the ends
-		mult_vec(p->normal, p->object->orientation, copysign(1.0, length)); //copysign returns the magnitude of first arg with sign of second, so this multiplies by 1.0 or -1.0
+	length = dot_prod(center_to_point, p->object->orientation);
+	if (fabs(fabs(length) - (p->object->height / 2)) < 0.001f)
+		mult_vec(p->normal, p->object->orientation, copysign(1.0, length));
 	else
 	{
 		mult_vec(temp, p->object->orientation, length);
@@ -20,7 +23,7 @@ static void	cylinder_normal(t_point *p)
 }
 
 //store the normal vector at point p into p->normal
-void make_normal_vector(t_point *p)
+void	make_normal_vector(t_point *p)
 {
 	if (p->object->type == PLANE)
 		mult_vec(p->normal, p->object->orientation, 1);

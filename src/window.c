@@ -20,7 +20,7 @@ void	check_pending_resize(void *param)
 
 	window = (t_app *)param;
 	if (!window->resize_pending)
-		return;
+		return ;
 	else if (!mlx_is_mouse_down(window->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
 		window->resize_pending = false;
@@ -37,7 +37,7 @@ void	print_selected_element(t_scene *s)
 	if (s->selected_type == SELECT_OBJECT)
 	{
 		temp = s->objects[s->selected_index]->position;
-		printf(format, o_strs[s->objects[s->selected_index]->type], temp[0],\
+		printf(format, o_strs[s->objects[s->selected_index]->type], temp[0], \
 temp[1], temp[2]);
 	}
 	else if (s->selected_type == SELECT_LIGHT)

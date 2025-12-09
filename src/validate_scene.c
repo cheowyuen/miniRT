@@ -98,19 +98,19 @@ bool	check_in_objects(t_scene *s, bool close)
 
 static bool	is_normal(double *vec)
 {
-	double length;
+	double	length;
 
 	length = abs_vec(vec);
 	if (length > 1.0)
 	{
-		if (vec[0] >= -1.0 && vec[0] <= 1.0 && vec[1] >= -1.0 && vec[1] <= 1.0\
- && vec[2] >= -1.0 && vec[2] <= 1.0 && length > 0.0001)
+		if (vec[0] >= -1.0 && vec[0] <= 1.0 && vec[1] >= -1.0 && vec[1] <= 1.0 \
+&& vec[2] >= -1.0 && vec[2] <= 1.0)
 		{
 			printf("Warning: components of vector in range [-1,1] but vector \
 is not normalized, normalizing\n");
 			normalize(vec);
 		}
-		else 
+		else
 			return (false);
 	}
 	if (length < 0.0001)
@@ -120,7 +120,7 @@ is not normalized, normalizing\n");
 
 void	check_requirements(t_scene *scene)
 {
-	int i;
+	int	i;
 
 	if (!scene->camera)
 		parse_error("No camera defined", NULL, scene, NULL);

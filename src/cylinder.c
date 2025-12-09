@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:51:46 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/10 16:32:51 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/24 14:22:39 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,27 +98,39 @@ static bool	hit_height(double t, t_ray ray, t_object *cylinder)
 	return (true);
 }
 
-bool	hit_cylinder(t_ray ray, t_object *cylinder, double *t)
+/*	
+	array v holds 4 3-dimensional vectors:
+	0: vector from ray origin to cylinder center
+	1: vector v[1] = ray direction d - projection of d onto cylinder axis 
+		== "the portion of ray direction that's perpendicular to the axis"
+	2: vector v[2] = v[0] - projection of v[0] onto cylinder axis
+		== "the portion of v[0] that's perpendicular to the axis"
+	This simplifies hit detection to a line-circle hit detection of lines v[1]
+	and	v[2] and the circle centered on the cylinder origin.
+	3:	v[3][0] holds the return value, which defaults to INIFINITY
+		v[3][1] holds the solution to intersection with v[1]
+		v[3][2] holds the solution to intersection with v[2]
+		if either v[3][1] or v[3][2] is less than inifinity, set value of *t
+		to be the smaller value and return true, else return false.
+*/
+bool	hit_cylinder(t_ray ray, t_object *cyl, double *t)
 {
 	double	v[4][3];
 	double	coeffs[4];
-	
+
 	v[3][0] = INFINITY;
-	sub_vec(v[0], ray.origin, cylinder->position);
-	proj_perpendicular(ray.direction, cylinder->orientation, v[1]);
-	proj_perpendicular(v[0], cylinder->orientation, v[2]);
-	coeffs[0] = dot_prod(v[1], v[1]);
-	coeffs[1] = 2 * dot_prod(v[2], v[1]);
-	coeffs[2] = dot_prod(v[2], v[2]) - (cylinder->radius * cylinder->radius);
-	coeffs[3] =  coeffs[1] * coeffs[1] - 4 * coeffs[0] * coeffs[2];
+	sub_vec(v[0], ray.origin, cyl->position);
+	proj_perpendicular(ray.direction, cyl->orientation, v[1]);
+	proj_perpendicular(v[0], cyl->orientation, v[2]);
+	make_coeffs(coeffs, v, cyl->radius);
 	if (fabs(coeffs[0]) < 1e-6 || coeffs[3] < 0)
 		return (false);
 	coeffs[3] = sqrt(coeffs[3]);
 	v[3][1] = (-coeffs[1] + coeffs[3]) / (2 * coeffs[0]);
 	v[3][2] = (-coeffs[1] - coeffs[3]) / (2 * coeffs[0]);
-	if (v[3][2] > 1e-6 && hit_height(v[3][2], ray, cylinder))
+	if (v[3][2] > 1e-6 && hit_height(v[3][2], ray, cyl))
 		v[3][0] = v[3][2];
-	if (v[3][1] > 1e-6 && hit_height(v[3][1], ray, cylinder) && v[3][1] < v[3][2])
+	if (v[3][1] > 1e-6 && hit_height(v[3][1], ray, cyl) && v[3][1] < v[3][2])
 		v[3][0] = v[3][1];
 	if (v[3][0] < INFINITY)
 	{

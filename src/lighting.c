@@ -11,13 +11,12 @@ static bool	check_side_of_plane(t_point *p, t_light *l, t_camera *cam)
 	sub_vec(point_to_light, l->position, p->point);
 	dot_cam = dot_prod(p->normal, point_to_cam);
 	dot_light = dot_prod(p->normal, point_to_light);
-	if (dot_cam < 0.0f && dot_light < 0.0f)
-	{//if both dot products are both negative, both light and camera are on
-	//"wrong side of plane"
-		mult_vec(p->normal, p->normal, -1.0f);
+	if (dot_cam < 0.0 && dot_light < 0.0)
+	{
+		mult_vec(p->normal, p->normal, -1.0);
 		return (true);
 	}
-	else if (dot_cam > 0.0f && dot_light > 0.0f)
+	else if (dot_cam > 0.0 && dot_light > 0.0)
 		return (true);
 	return (false);
 }
@@ -49,10 +48,12 @@ static double	min_distance(t_ray *ray, t_object *object)
 	return (INFINITY);
 }
 
-//goes through the list of objects: if the one with the smallest distance is 
-//less than the distance to the light, return false, else return true
-//to offset the point so it doesn't self-shadow, move point a tiny bit in the 
-//direction of the normal
+/*
+	goes through the list of objects: if the one with the smallest distance is 
+	less than the distance to the light, return false, else return true
+	to offset the point so it doesn't self-shadow, move point a tiny bit in the 
+	direction of the normal
+*/
 static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 {
 	double	distance;
@@ -63,7 +64,7 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 
 	if (p->object->type == PLANE && !check_side_of_plane(p, l, s->camera))
 		return (false);
-	mult_vec(temp, p->normal, 0.01f); //move the offsetting to the point calculation for efficency?
+	mult_vec(temp, p->normal, 0.01);
 	add_vec(offset_point, p->point, temp);
 	sub_vec(temp, l->position, offset_point);
 	distance = abs_vec(temp);
@@ -95,17 +96,17 @@ int32_t	get_color(t_point *p, t_scene *s)
 	return (add_colors(ambient, light));
 }
 
-double get_light_intensity(t_point *p, t_scene *s)
+double	get_light_intensity(t_point *p, t_scene *s)
 {
 	double	dist;
 	double	attenuation;
-	double 	total;
+	double	total;
 	double	normal[3];
 	double	light_to_point[3];
 
 	total = 0;
 	make_normal_vector(p);
-	if(is_visible(p, s->light, s))
+	if (is_visible(p, s->light, s))
 	{
 		mult_vec(normal, p->normal, 1.0f / abs_vec(p->normal));
 		sub_vec(light_to_point, s->light->position, p->point);
@@ -115,7 +116,7 @@ double get_light_intensity(t_point *p, t_scene *s)
 		total = dot_prod(normal, light_to_point) * attenuation;
 		total *= s->light->intensity;
 		if (total < 0)
-            total = 0;
+			total = 0;
 	}
 	return (total);
 }

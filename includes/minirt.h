@@ -176,6 +176,8 @@ void		make_point(t_point *p, double *position, t_object *object);
 void		hit_points(double *hit, double *origin, double *direction, double t);
 void		proj_perpendicular(double *vec, double *axis, double *result);
 void 		add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy);
+void		make_coeffs(double *coeffs, double **vectors, double radius);
+
 
 //ray_makers.c
 t_ray		make_ray(t_camera *c, uint32_t cx, uint32_t cy);

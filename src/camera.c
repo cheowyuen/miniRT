@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:25:08 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/27 12:51:30 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/09 11:46:01 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static void	setup_orthographic(t_camera *c, int32_t width, int32_t height)
 		c->delta_y[i] = -c->up[i] * vh / height;
 		c->zero[i] = c->position[i] - (c->right[i] * vw / 2.0) + \
 (c->up[i] * vh / 2.0);
-//		c->zero[i] += c->delta_x[i] / 2.0 + c->delta_y[i] / 2.0; 
 	}
 }
 

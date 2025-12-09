@@ -1,14 +1,14 @@
 #include "minirt.h"
 
 //target must be an array of length 3
-void blend_colors(double *target, int32_t a, int32_t b)
+void	blend_colors(double *target, int32_t a, int32_t b)
 {
 	target[0] = (((a >> 24) & 0xFF) / 255.0f) * (((b >> 24) & 0xFF) / 255.0f);
 	target[1] = (((a >> 16) & 0xFF) / 255.0f) * (((b >> 16) & 0xFF) / 255.0f);
 	target[2] = (((a >> 8) & 0xFF) / 255.0f) * (((b >> 8) & 0xFF) / 255.0f);
 }
 
-int32_t add_colors(double *color_a, double *color_b)
+int32_t	add_colors(double *color_a, double *color_b)
 {
 	uint8_t		channel[3];
 	uint32_t	final;

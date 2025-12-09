@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:49:58 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/24 16:18:52 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/11/28 10:39:44 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	make_point(t_point *p, double *position, t_object *object)
 		p->point[i] = position[i];
 }
 
-// used by hit_cylinder, see vectors definition there
-void	make_coeffs(double *coeffs, double **vectors, double radius)
+// only called by hit_cylinder, see vectors definition there
+void	make_coeffs(double *coeffs, double vectors[4][3], double radius)
 {
 	coeffs[0] = dot_prod(vectors[1], vectors[1]);
 	coeffs[1] = 2 * dot_prod(vectors[2], vectors[1]);

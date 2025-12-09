@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:25:08 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 11:46:01 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/09 16:55:27 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ static void	setup_perspective(t_camera *c, int32_t width, int32_t height)
 	int			i;
 
 	fov_rad = c->fov * M_PI / 180.0;
-	// vw = 2.0 * tan(fov_rad / 2);
-	// vh = vw / ((double)width / height);
-	vh = 2.0 * tan(fov_rad / 2);
-	vw = vh * ((double)width / height);
+	vw = 2.0 * tan(fov_rad / 2);
+	vh = vw / ((double)width / height);
 	i = -1;
 	while (++i < 3)
 	{

@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:55:43 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 11:23:00 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/09 17:13:00 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,12 @@ static double	get_step(t_scene *s)
 	return (0.05);
 }
 
-void	move_camera(keys_t key, t_app *window)
+static void	get_camera_move(keys_t key, t_scene *s, double step, double move[3])
 {
-	double		step;
-	double		move[3];
-	double		right[3];
-	double		default_up[3];
-	t_scene		*s;
-	bool		valid;
-	double		revert[3];
+	double	right[3];
+	double	default_up[3];
 
-	s = window->scene;
-	ft_bzero(move, sizeof(move));
-	step = get_step(s);
+	ft_bzero(move, sizeof(double) * 3);
 	cal_right(right, default_up, s->camera->direction);
 	if (key == MLX_KEY_Q)
 		mult_vec(move, default_up, step);
@@ -76,9 +69,20 @@ void	move_camera(keys_t key, t_app *window)
 		mult_vec(move, s->camera->direction, step);
 	else if (key == MLX_KEY_S)
 		mult_vec(move, s->camera->direction, -step);
+}
+
+void	move_camera(keys_t key, t_app *window)
+{
+	double		step;
+	double		move[3];
+	t_scene		*s;
+	double		revert[3];
+
+	s = window->scene;
+	step = get_step(s);
+	get_camera_move(key, s, step, move);
 	update_position(s, move);
-	valid = check_in_objects(s, false);
-	if (!valid)
+	if (!check_in_objects(s, false))
 	{
 		mult_vec(revert, move, -1);
 		update_position(s, revert);

@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:56:49 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 12:07:22 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:59:36 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,13 @@ static void	update_vec(double *vec, t_app *window)
 	}
 }
 
-
 static void	reset_rotation(t_app *window, double direction[3])
 {
 	t_scene	*s;
 
 	s = window->scene;
-	if (s->selected_type == SELECT_OBJECT &&\
- s->objects[s->selected_index]->type != SPHERE)
+	if (s->selected_type == SELECT_OBJECT
+		&& s->objects[s->selected_index]->type != SPHERE)
 		copy_vec(s->objects[s->selected_index]->orientation, direction);
 	else if (s->selected_type == SELECT_CAMERA)
 		copy_vec(s->camera->direction, direction);
@@ -97,10 +96,8 @@ void	pan_camera(keys_t key, t_app *window)
 {
 	double		vectors[5][3];
 	t_scene		*s;
-	t_object	*obj;
 
 	s = window->scene;
-	obj = s->objects[s->selected_index];
 	if (!(is_rotatable(s, vectors[2], vectors[3], vectors[1])))
 		return ;
 	copy_vec(vectors[4], vectors[2]);

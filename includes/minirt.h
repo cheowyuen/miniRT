@@ -178,7 +178,6 @@ void		proj_perpendicular(double *vec, double *axis, double *result);
 void 		add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy);
 void		make_coeffs(double *coeffs, double vectors[4][3], double radius);
 
-
 //ray_makers.c
 t_ray		make_ray(t_camera *c, uint32_t cx, uint32_t cy);
 t_ray		make_ray_to_point(double *origin, double *target);
@@ -205,5 +204,8 @@ int32_t 	add_colors(double *color_a, double *color_b);
 //validate_scene.c
 bool		check_in_objects(t_scene *s, bool close);
 void		check_requirements(t_scene *scene);
+
+//validation_utils.c
+bool		validate_position(t_scene *s, double *pos, char *str, bool close);
 
 #endif

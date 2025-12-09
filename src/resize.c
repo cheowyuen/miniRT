@@ -6,30 +6,15 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 09:33:25 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/24 12:27:17 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/09 17:07:21 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-//add safety checks: radius and height should remain > 0
-//maybe change to percent change, so a multiplier instead of addition
-void	resize_obj(keys_t key, t_app *window)
+static void	apply_resize(t_object *obj, keys_t key, double factor_up
+	, double factor_down)
 {
-	t_scene		*s;
-	t_object	*obj;
-	double		factor_up;
-	double		factor_down;
-	double		old_radius;
-	double		old_height;
-	bool		valid;
-
-	s = window->scene;
-	obj = s->objects[s->selected_index];
-	old_radius = obj->radius;
-	old_height = obj->height;
-	factor_up = 1.02;
-	factor_down = 0.98;
 	if (key == MLX_KEY_UP)
 	{
 		if (obj->type == SPHERE)
@@ -44,8 +29,21 @@ void	resize_obj(keys_t key, t_app *window)
 		else if (obj->type == CYLINDER && obj->height * factor_down > 0.01)
 			obj->height *= factor_down;
 	}
-	valid = check_in_objects(s, false);
-	if (!valid)
+}
+
+void	resize_obj(keys_t key, t_app *window)
+{
+	t_scene		*s;
+	t_object	*obj;
+	double		old_radius;
+	double		old_height;
+
+	s = window->scene;
+	obj = s->objects[s->selected_index];
+	old_radius = obj->radius;
+	old_height = obj->height;
+	apply_resize(obj, key, 1.02, 0.98);
+	if (!check_in_objects(s, false))
 	{
 		obj->radius = old_radius;
 		obj->height = old_height;

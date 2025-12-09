@@ -32,7 +32,7 @@ void	parse_sphere(char *str, t_object *object, t_scene *scene)
 	if (temp == -1)
 		parse_error("error parsing position on line: ", str, scene, object);
 	i += temp;
-	object->radius = ft_atod(str + i, &i, ' ');
+	object->radius = ft_atod(str + i, &i, ' ') / 2.0;
 	if (i == -1 || object->radius <= 0)
 		parse_error("error parsing radius on line: ", str, scene, object);
 	temp = parse_color(&object->color, str + i);
@@ -55,7 +55,7 @@ void	parse_cylinder(char *str, t_object *object, t_scene *scene)
 	if (temp == -1)
 		parse_error("error parsing direction on line: ", str, scene, object);
 	i += temp;
-	object->radius = ft_atod(str + i, &i, ' ');
+	object->radius = ft_atod(str + i, &i, ' ') / 2.0;
 	if (i == -1 || object->radius <= 0)
 		parse_error("error parsing radius on line: ", str, scene, object);
 	object->height = ft_atod(str + i, &i, ' ');

@@ -100,7 +100,6 @@ ssize_t	parse_color(int32_t *color, char *str)
 ssize_t	parse_triplet(double *target, char *str)
 {
 	const char	*delims = ",, ";
-	double		temp;
 	ssize_t		count;
 	int			read;
 	int			index;

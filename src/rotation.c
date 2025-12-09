@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:56:49 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/24 12:36:00 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/09 12:07:22 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,38 +72,50 @@ static void	update_vec(double *vec, t_app *window)
 	}
 }
 
+
+static void	reset_rotation(t_app *window, double direction[3])
+{
+	t_scene	*s;
+
+	s = window->scene;
+	if (s->selected_type == SELECT_OBJECT &&\
+ s->objects[s->selected_index]->type != SPHERE)
+		copy_vec(s->objects[s->selected_index]->orientation, direction);
+	else if (s->selected_type == SELECT_CAMERA)
+		copy_vec(s->camera->direction, direction);
+}
+
+/*
+	vectors array holds:
+	0: final vector passed as new camera direction
+	1: right vector used during calculations
+	2: direction of rotation
+	3: up vector used during calculations
+	4: old direction to be returned if something went wrong
+*/
 void	pan_camera(keys_t key, t_app *window)
 {
-	double		vec[3];
-	double		right[3];
+	double		vectors[5][3];
 	t_scene		*s;
-	double		direction[3];
-	double		up[3];
-	bool		valid;
-	double		old_dir[3];
 	t_object	*obj;
 
 	s = window->scene;
 	obj = s->objects[s->selected_index];
-	if (!(is_rotatable(s, direction, up, right)))
+	if (!(is_rotatable(s, vectors[2], vectors[3], vectors[1])))
 		return ;
-	copy_vec(old_dir, direction);
+	copy_vec(vectors[4], vectors[2]);
 	if (key == MLX_KEY_I)
-		rotate_vec(direction, right, ROTATION_ANGLE, vec);
+		rotate_vec(vectors[2], vectors[1], ROTATION_ANGLE, vectors[0]);
 	else if (key == MLX_KEY_K)
-		rotate_vec(direction, right, -ROTATION_ANGLE, vec);
+		rotate_vec(vectors[2], vectors[1], -ROTATION_ANGLE, vectors[0]);
 	else if (key == MLX_KEY_J)
-		rotate_vec(direction, up, -ROTATION_ANGLE, vec);
+		rotate_vec(vectors[2], vectors[3], -ROTATION_ANGLE, vectors[0]);
 	else if (key == MLX_KEY_L)
-		rotate_vec(direction, up, ROTATION_ANGLE, vec);
-	update_vec(vec, window);
-	valid = check_in_objects(s, false);
-	if (!valid)
+		rotate_vec(vectors[2], vectors[3], ROTATION_ANGLE, vectors[0]);
+	update_vec(vectors[0], window);
+	if (!check_in_objects(s, false))
 	{
-		if (s->selected_type == SELECT_OBJECT && obj->type != SPHERE)
-			copy_vec(obj->orientation, old_dir);
-		else if (s->selected_type == SELECT_CAMERA)
-			copy_vec(s->camera->direction, old_dir);
+		reset_rotation(window, vectors[4]);
 		return ;
 	}
 	update_image(window);

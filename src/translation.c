@@ -6,19 +6,11 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:55:43 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/24 12:27:34 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/09 11:23:00 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-static void	cal_move(double *move, double *direction, double step)
-{
-	double	scaled[3];
-
-	mult_vec(scaled, direction, step);
-	add_vec(move, move, scaled);
-}
 
 static void	update_position(t_scene *s, double *move)
 {
@@ -73,17 +65,17 @@ void	move_camera(keys_t key, t_app *window)
 	step = get_step(s);
 	cal_right(right, default_up, s->camera->direction);
 	if (key == MLX_KEY_Q)
-		cal_move(move, default_up, step);
+		mult_vec(move, default_up, step);
 	else if (key == MLX_KEY_E)
-		cal_move(move, default_up, -step);
+		mult_vec(move, default_up, -step);
 	else if (key == MLX_KEY_A)
-		cal_move(move, right, -step);
+		mult_vec(move, right, -step);
 	else if (key == MLX_KEY_D)
-		cal_move(move, right, step);
+		mult_vec(move, right, step);
 	else if (key == MLX_KEY_W)
-		cal_move(move, s->camera->direction, step);
+		mult_vec(move, s->camera->direction, step);
 	else if (key == MLX_KEY_S)
-		cal_move(move, s->camera->direction, -step);
+		mult_vec(move, s->camera->direction, -step);
 	update_position(s, move);
 	valid = check_in_objects(s, false);
 	if (!valid)

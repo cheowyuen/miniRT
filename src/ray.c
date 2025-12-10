@@ -6,9 +6,10 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:50:17 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/20 10:48:57 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/10 01:09:27 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minirt.h"
 
 bool	hit_object(double *dir, double *oc, double r, double *t)
@@ -102,6 +103,7 @@ int32_t	color_of_pixel(t_scene *scene, uint32_t cx, uint32_t cy)
 	if (hit_info.obj)
 	{
 		hit_points(hit, ray.origin, ray.direction, hit_info.t);
+		// printf("hit %f %f %f", hit[0], hit[1], hit[2]);
 		make_point(&p, hit, hit_info.obj);
 		return (get_color(&p, scene));
 	}

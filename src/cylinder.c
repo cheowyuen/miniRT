@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:51:46 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/28 10:39:26 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/10 01:24:50 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,9 @@ bool	hit_cylinder(t_ray ray, t_object *cyl, double *t)
 	coeffs[0] = 1.0 / (2 * coeffs[0]);
 	v[3][1] = (-coeffs[1] + coeffs[3]) * coeffs[0];
 	v[3][2] = (-coeffs[1] - coeffs[3]) * coeffs[0];
-	if (v[3][2] > 1e-6 && hit_height(v[3][2], ray, cyl))
+	if (v[3][2] >= 0 && hit_height(v[3][2], ray, cyl))
 		v[3][0] = v[3][2];
-	if (v[3][1] > 1e-6 && hit_height(v[3][1], ray, cyl) && v[3][1] < v[3][2])
+	if (v[3][1] >= 0 && hit_height(v[3][1], ray, cyl) && v[3][1] < v[3][2])
 		v[3][0] = v[3][1];
 	if (v[3][0] < INFINITY)
 	{

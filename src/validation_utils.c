@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:50:44 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 18:00:27 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/10 01:09:07 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static bool	intersect_cylinder(t_object *obj, double *pos)
 	mult_vec(mult, obj->orientation, d);
 	add_vec(axis, obj->position, mult);
 	sub_vec(vec, pos, axis);
-	if (abs_vec(vec) <= obj->radius + 1e-2)
+	if (abs_vec(vec) < obj->radius - 1e-6)
 		return (true);
 	return (false);
 }
@@ -56,7 +56,7 @@ bool	validate_position(t_scene *s, double *pos, char *str, bool close)
 		if (obj->type == SPHERE)
 		{
 			sub_vec(vec, pos, obj->position);
-			if (abs_vec(vec) <= obj->radius + 1e-2)
+			if (abs_vec(vec) < obj->radius - 1e-6)
 				return (handle_error(str, s, close));
 		}
 		else if (obj->type == CYLINDER)

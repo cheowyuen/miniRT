@@ -7,3 +7,4 @@ miniRT
 unit_tests/*
 !unit_tests/*.*
 tags
+.DS_Store

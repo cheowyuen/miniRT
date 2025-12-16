@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 18:00:05 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 18:00:07 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/16 15:03:00 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static bool	is_normal(double *vec)
 	double	length;
 
 	length = abs_vec(vec);
-	if (length > 1.0)
+	if (length > 1.0001 || length < 0.9999)
 	{
 		if (vec[0] >= -1.0 && vec[0] <= 1.0 && vec[1] >= -1.0 && vec[1] <= 1.0 \
 && vec[2] >= -1.0 && vec[2] <= 1.0)

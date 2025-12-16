@@ -87,7 +87,7 @@ ssize_t	parse_color(int32_t *color, char *str)
 		val = 0;
 		if (!ft_isdigit(str[i]))
 			return (-1);
-		while (ft_isdigit(str[i]))
+		while (ft_isdigit(str[i]) && val <= 255)
 			val = val * 10 + (str[i++] - '0');
 		if (val > 255 || (c < 2 && str[i++] != ',') || (c == 2 && str[i]))
 			return (-1);

@@ -6,7 +6,7 @@
 #    By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 11:01:30 by cwong             #+#    #+#              #
-#    Updated: 2025/12/16 13:43:45 by nraatika         ###   ########.fr        #
+#    Updated: 2025/12/17 11:21:21 by nraatika         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(LIBFT):
 	make -C $(LIBFT_PATH)
 
-$(MLX):		$(MLX_PATH)$(MLX_NAME)
+$(MLX):
 		cd $(MLX_BPATH)	&& cmake -B build
 		$(MAKE) -C $(MLX_PATH)
 

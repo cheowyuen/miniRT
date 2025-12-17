@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/17 09:50:02 by nraatika          #+#    #+#             */
+/*   Updated: 2025/12/17 09:50:17 by nraatika         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
-//all double pointers must point to arrays of size 3
 
 //add together two vectors, store result in target. 
 void	add_vec(double *target, double *a, double *b)

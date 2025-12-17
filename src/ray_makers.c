@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_makers.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/17 09:48:52 by nraatika          #+#    #+#             */
+/*   Updated: 2025/12/17 09:49:43 by nraatika         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 t_ray	make_ray_perspective(t_camera *cam, uint32_t cx, uint32_t cy)
@@ -19,8 +31,8 @@ t_ray	make_ray_perspective(t_camera *cam, uint32_t cx, uint32_t cy)
 }
 
 /*
-	Orthographic projection:objects always seem the size they are compared to 
-	default viewport size 20.0
+	Orthographic projection: objects always seem the size they are compared to 
+	default viewport size 20.0. No perspective
 */
 t_ray	make_ray_orthographic(t_camera *cam, uint32_t cx, uint32_t cy)
 {

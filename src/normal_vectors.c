@@ -6,7 +6,7 @@
 /*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 09:45:21 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/17 09:45:24 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:56:22 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	cylinder_normal(t_point *p)
 
 	sub_vec(center_to_point, p->point, p->object->position);
 	length = dot_prod(center_to_point, p->object->orientation);
-	if (fabs(fabs(length) - (p->object->height / 2)) < 0.001f)
+	if (fabs(fabs(length) - (p->object->height / 2)) < EPSILON)
 		mult_vec(p->normal, p->object->orientation, copysign(1.0, length));
 	else
 	{

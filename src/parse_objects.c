@@ -6,7 +6,7 @@
 /*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 09:45:45 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/17 09:45:48 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:02:46 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	parse_plane(char *str, t_object *object, t_scene *scene)
 	int		i;
 
 	i = 1;
-	while (str[i] == ' ')
+	while (str[i] == ' ' || str[i] == '\t')
 		++i;
 	temp = parse_triplet(object->position, str + i);
 	if (temp == -1)
@@ -118,7 +118,7 @@ t_light	*make_light(char *str, t_scene *scene, bool ambient)
 	if (!light)
 		parse_error("malloc error: ", strerror(errno), scene, NULL);
 	i = 1;
-	while (str[i] == ' ')
+	while (str[i] == ' ' || str[i] == '\t')
 		++i;
 	if (!ambient)
 	{

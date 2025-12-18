@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 13:47:48 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/18 13:39:06 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/18 16:25:30 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <stdio.h>
 # include <string.h>
 
-# define EPSILON 1e-3
+# define EPSILON 1e-4
 # define LINEAR 0.01
 # define QUAD 0.001
 # define HEIGHT 1000

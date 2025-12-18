@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:51:46 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/10 01:24:50 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/18 16:56:22 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ bool	cal_t(double a, double b, double discriminant, double *t)
 
 	t1 = (-b + sqrt(discriminant)) / (2 * a);
 	t2 = (-b - sqrt(discriminant)) / (2 * a);
-	if (t1 > 0 && t2 > 0)
+	if (t1 > EPSILON && t2 > EPSILON)
 	{
 		if (t1 < t2)
 			*t = t1;
 		else
 			*t = t2;
 	}
-	else if (t1 > 0)
+	else if (t1 > EPSILON)
 		*t = t1;
-	else if (t2 > 0)
+	else if (t2 > EPSILON)
 		*t = t2;
 	else
 		return (false);
@@ -43,10 +43,10 @@ static bool	hit_disk(double *center, t_ray ray, t_object *cylinder, double *t)
 
 	sub_vec(v.oc, center, ray.origin);
 	denom = dot_prod(ray.direction, cylinder->orientation);
-	if (fabs(denom) > 1e-6)
+	if (fabs(denom) > EPSILON)
 	{
 		*t = dot_prod(v.oc, cylinder->orientation) / denom;
-		if (*t > 1e-6)
+		if (*t > EPSILON)
 		{
 			hit_points(v.hit, ray.origin, ray.direction, *t);
 			sub_vec(v.vec, v.hit, center);
@@ -123,7 +123,7 @@ bool	hit_cylinder(t_ray ray, t_object *cyl, double *t)
 	proj_perpendicular(ray.direction, cyl->orientation, v[1]);
 	proj_perpendicular(v[0], cyl->orientation, v[2]);
 	make_coeffs(coeffs, v, cyl->radius);
-	if (fabs(coeffs[0]) < 1e-6 || coeffs[3] < 0)
+	if (fabs(coeffs[0]) < EPSILON || coeffs[3] < -EPSILON)
 		return (false);
 	coeffs[3] = sqrt(coeffs[3]);
 	coeffs[0] = 1.0 / (2 * coeffs[0]);

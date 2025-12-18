@@ -6,7 +6,7 @@
 /*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 09:43:22 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/18 15:58:53 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 16:56:22 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static bool	check_side_of_plane(t_point *p, t_light *l, t_camera *cam)
 	sub_vec(point_to_light, l->position, p->point);
 	dot_cam = dot_prod(p->normal, point_to_cam);
 	dot_light = dot_prod(p->normal, point_to_light);
-	if (dot_cam < -1e-6 && dot_light < -1e-6)
+	if (dot_cam < -EPSILON && dot_light < -EPSILON)
 	{
 		mult_vec(p->normal, p->normal, -1.0);
 		return (true);
 	}
-	else if (dot_cam > 1e-6 && dot_light > 1e-6)
+	else if (dot_cam > EPSILON && dot_light > EPSILON)
 		return (true);
 	return (false);
 }
@@ -85,7 +85,7 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 	while (i < s->num_objects)
 	{
 		distances[1] = min_distance(&ray, s->objects[i]);
-		if (distances[1] > 0.0001 && distances[1] < distances[0] - 0.0001)
+		if (distances[1] > EPSILON && distances[1] < distances[0] - EPSILON)
 			return (false);
 		++i;
 	}

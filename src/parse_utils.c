@@ -6,11 +6,12 @@
 /*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 09:48:06 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/17 09:48:11 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 17:14:20 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
 
 static ssize_t	parse_whole_number(double *value, char *str, int *read, \
 char delim)
@@ -23,7 +24,8 @@ char delim)
 		*value = *value * 10 + str[i] - '0';
 		++i;
 	}
-	if (i != 0 && (str[i] == '\0' || str[i] == delim) && !isinf(*value))
+	if (i != 0 && (str[i] == '\0' || str[i] == delim || \
+				(delim == ' ' && str[i] == '\t')) && !isinf(*value))
 	{
 		*read = *read + i;
 		return (i);
@@ -50,7 +52,7 @@ static ssize_t	parse_fractions(double *value, char *str, int *read, char delim)
 		divisor *= 10;
 		++i;
 	}
-	if (str[i] != delim && str[i] != '\0')
+	if (str[i] != delim && str[i] != '\0' && !(str[i] == '\t' && delim == ' '))
 	{
 		*read = -1;
 		return (-1);
@@ -65,7 +67,7 @@ double	ft_atod(char *line, int *read, char delimiter)
 	int		sign;
 	ssize_t	i;
 
-	while (*line == ' ' && ++(*read))
+	while ((*line == ' ' || *line == '\t') && ++(*read))
 		line++;
 	value = 0.0;
 	sign = 1;
@@ -118,7 +120,7 @@ ssize_t	parse_triplet(double *target, char *str)
 
 	index = -1;
 	count = 0;
-	while (*str == ' ' && ++count)
+	while ((*str == ' ' || *str == '\t') && ++count)
 		str++;
 	while (++index < 3)
 	{

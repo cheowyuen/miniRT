@@ -6,7 +6,7 @@
 /*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 09:43:22 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/17 09:43:25 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 15:58:53 by nraatika         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static bool	check_side_of_plane(t_point *p, t_light *l, t_camera *cam)
 	sub_vec(point_to_light, l->position, p->point);
 	dot_cam = dot_prod(p->normal, point_to_cam);
 	dot_light = dot_prod(p->normal, point_to_light);
-	if (dot_cam < 0.0 && dot_light < 0.0)
+	if (dot_cam < -1e-6 && dot_light < -1e-6)
 	{
 		mult_vec(p->normal, p->normal, -1.0);
 		return (true);
 	}
-	else if (dot_cam > 0.0 && dot_light > 0.0)
+	else if (dot_cam > 1e-6 && dot_light > 1e-6)
 		return (true);
 	return (false);
 }
@@ -68,7 +68,7 @@ static double	min_distance(t_ray *ray, t_object *object)
 */
 static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 {
-	double	distance;
+	double	distances[2];
 	double	temp[3];
 	double	offset_point[3];
 	size_t	i;
@@ -79,12 +79,13 @@ static bool	is_visible(t_point *p, t_light *l, t_scene *s)
 	mult_vec(temp, p->normal, 0.01);
 	add_vec(offset_point, p->point, temp);
 	sub_vec(temp, l->position, offset_point);
-	distance = abs_vec(temp);
+	distances[0] = abs_vec(temp);
 	ray = make_ray_to_point(offset_point, l->position);
 	i = 0;
 	while (i < s->num_objects)
 	{
-		if (min_distance(&ray, s->objects[i]) < distance)
+		distances[1] = min_distance(&ray, s->objects[i]);
+		if (distances[1] > 0.0001 && distances[1] < distances[0] - 0.0001)
 			return (false);
 		++i;
 	}

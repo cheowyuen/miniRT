@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 13:47:48 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/17 13:47:56 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:39:06 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,8 +199,6 @@ void				hit_points(double *hit, double *origin, double *direction,
 						double t);
 void				proj_perpendicular(double *vec, double *axis,
 						double *result);
-void				add_scaled_vecs(double pos[3], t_camera *camera, int cx,
-						int cy);
 void				make_coeffs(double *coeffs, double vectors[4][3],
 						double radius);
 

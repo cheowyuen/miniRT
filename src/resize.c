@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 09:33:25 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 17:07:21 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/18 12:23:52 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ void	resize_obj(keys_t key, t_app *window)
 	double		old_height;
 
 	s = window->scene;
+	if (s->selected_type != SELECT_OBJECT)
+		return ;
 	obj = s->objects[s->selected_index];
 	old_radius = obj->radius;
 	old_height = obj->height;
-	apply_resize(obj, key, 1.02, 0.98);
+	apply_resize(obj, key, 1.05, 0.95);
 	if (!check_in_objects(s, false))
 	{
 		obj->radius = old_radius;

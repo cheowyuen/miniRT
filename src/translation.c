@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 10:55:43 by cwong             #+#    #+#             */
-/*   Updated: 2025/12/09 17:13:00 by cwong            ###   ########.fr       */
+/*   Updated: 2025/12/18 12:19:24 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static double	get_step(t_scene *s)
 	double		pct;
 	t_object	*obj;
 
-	pct = 0.1;
+	pct = 0.2;
 	if (s->selected_type == SELECT_OBJECT)
 	{
 		obj = s->objects[s->selected_index];
@@ -46,7 +46,7 @@ static double	get_step(t_scene *s)
 	else if (s->selected_type == SELECT_LIGHT)
 		return (1.0);
 	else if (s->selected_type == SELECT_CAMERA)
-		return (0.05);
+		return (1.0);
 	return (0.05);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:49:58 by cwong             #+#    #+#             */
-/*   Updated: 2025/11/28 10:39:44 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:38:57 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,6 @@ void	proj_perpendicular(double *vec, double *axis, double *result)
 	dot = dot_prod(vec, axis);
 	mult_vec(result, axis, dot);
 	sub_vec(result, vec, result);
-}
-
-void	add_scaled_vecs(double pos[3], t_camera *camera, int cx, int cy)
-{
-	pos[0] = camera->zero[0] + camera->delta_x[0] * cx
-		+ camera->delta_y[0] * cy;
-	pos[1] = camera->zero[1] + camera->delta_x[1] * cx
-		+ camera->delta_y[1] * cy;
-	pos[2] = camera->zero[2] + camera->delta_x[2] * cx
-		+ camera->delta_y[2] * cy;
 }
 
 void	make_point(t_point *p, double *position, t_object *object)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_makers.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nraatika <nraatika@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: cwong <cwong@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 09:48:52 by nraatika          #+#    #+#             */
-/*   Updated: 2025/12/17 09:49:43 by nraatika         ###   ########.fr       */
+/*   Updated: 2025/12/18 13:42:15 by cwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ t_ray	make_ray_perspective(t_camera *cam, uint32_t cx, uint32_t cy)
 {
 	t_ray	ray;
 	int		i;
-	double	pixel_pos[3];
 
-	add_scaled_vecs(pixel_pos, cam, cx, cy);
 	copy_vec(ray.origin, cam->position);
 	i = -1;
 	while (++i < 3)
